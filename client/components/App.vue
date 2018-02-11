@@ -1,27 +1,23 @@
 <template>
   <div id="app">
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+      <h5 class="my-0 mr-md-auto font-weight-normal"><a href="#/">CryptoGames</a></h5>
+      <navigation></navigation>
+      <a class="btn btn-outline-primary" href="#/profile">Profile</a>
+    </div>
     <router-view></router-view>
   </div>
 </template>
 
 <style>
-body {
-  margin: 0;
-  font-size: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont,
-               'avenir next', avenir,
-               helvetica, 'helvetica neue',
-               Ubuntu,
-               'segoe ui', arial,
-               sans-serif;
-}
-.page {
-  text-align: center;
-  /* nesting for the need to test postcss */
-  code {
-    background-color: #f0f0f0;
-    padding: 3px 5px;
-    border-radius: 2px;
-  }
-}
+
 </style>
+<script>
+  import Navigation from 'components/Navigation'
+
+  export default {
+    components: {
+      Navigation
+    }
+  }
+</script>

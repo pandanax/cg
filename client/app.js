@@ -4,6 +4,7 @@ import App from './components/App'
 import router from './router'
 import store from './store'
 
+
 sync(store, router)
 
 const app = new Vue({
@@ -12,4 +13,4 @@ const app = new Vue({
   ...App
 })
 
-export { app, router, store }
+export { app, router, store}
