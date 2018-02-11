@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
 
 
     <p v-if="level == -1">LOADING...</p>

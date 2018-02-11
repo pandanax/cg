@@ -54,7 +54,6 @@
 
           router.push({path: '/game/' + self.gameId + '/' + r})
 
-
         }).catch(function (r) {
           console.error(e)
 

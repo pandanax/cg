@@ -1,15 +1,6 @@
 import EtherData from "ether";
 import $ from "jquery"; // подключаем jQuery
 
-const Eth = require('ethjs-query')
-const EthContract = require('ethjs-contract')
-
-/*function startApp(web3) {
- const eth = new Eth(web3.currentProvider)
- const contract = new EthContract(eth)
- initContract(contract)
- }*/
-
 export default class Metamask {
 
   detectLevel() {
@@ -56,11 +47,8 @@ export default class Metamask {
 
           $.getJSON(EtherData.abiUrl(gameId), function (data) {
 
-            const eth = new Eth(web3.currentProvider)
-            const contract = new EthContract(eth)
-
-            const Lot = contract(data.abi)
-            const lot = Lot.at(EtherData.address[gameId]);
+            var MyContract = web3.eth.contract(data.abi);
+            var lot = MyContract.at(EtherData.address[gameId]);
 
             resolve({contract: lot, data: data});
           }, function (e) {
@@ -79,27 +67,17 @@ export default class Metamask {
             var MyContract = web3.eth.contract(data.abi);
             var myContractInstance = MyContract.at(EtherData.address[gameId]);
 
-            console.log('myContractInstance', myContractInstance);
+            resolve(
+              {
+                e1: myContractInstance.TicketSelling({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'}),
+                e2: myContractInstance.PeriodFinished({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'})
+              }
+            );
 
 
-            var myEvent = myContractInstance.TicketSelling({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'});
-            myEvent.watch(function(error, result){
-
-              console.log('AAAArrr',result, '---');
-
-            });
-
-// would get all past logs again.
-            var myResults = myEvent.get(function(error, logs){
-
-              console.log('adsaas',logs)
-
-            });
-              console.log('rrrr',myResults);
-
-
-
-          });
+          }, function (e) {
+            reject(e);
+          })
 
 
         })
@@ -116,10 +94,11 @@ export default class Metamask {
             lot.contract.buyTicket(pNum, nonce, {
               from: web3.eth.accounts[0],
               value: price
-            }).then(function (r) {
+            }, function (e, r) {
+              if (e) {
+                reject(e);
+              }
               resolve(r);
-            }).catch(function (e) {
-              reject(e);
             });
 
           }).catch(function (e) {
@@ -148,10 +127,14 @@ export default class Metamask {
               }
             }
 
-            for (let i = 0; i < fields.length; i++) {
+            ret['address'] = lot.contract.address;
 
-              lot.contract[fields[i].name]().then(function (r) {
-                ret[fields[i].name] = self.parseVal(fields[i].type, r[0]);
+            for (let i = 0; i < fields.length; i++) {
+              lot.contract[fields[i].name](function (e, r) {
+                if (e) {
+                  reject(e);
+                }
+                ret[fields[i].name] = r;
                 filled++;
                 if (filled == fields.length) {
                   resolve(ret);
@@ -179,7 +162,11 @@ export default class Metamask {
 
           self.getContractInstance(gameId).then(function (lot) {
 
-            lot.contract.periods(pNum).then(function (r) {
+            lot.contract.periods(pNum, function (e, r) {
+
+              if (e) {
+                reject(e);
+              }
 
               let filled = 0;
               let ret = {};
@@ -193,7 +180,7 @@ export default class Metamask {
 
               if (fields.length) {
                 for (let i = 0; i < fields.length; i++) {
-                  ret[fields[i].name] = self.parseVal(fields[i].type, r[i]);
+                  ret[fields[i].name] = r[i];
                   filled++;
                   if (filled == fields.length) {
                     resolve(ret);
@@ -204,8 +191,6 @@ export default class Metamask {
               }
 
 
-            }).catch(function (e) {
-              reject(e);
             })
           }).catch(function (e) {
             reject(e);
@@ -249,7 +234,7 @@ export default class Metamask {
 
                 for (var t = 0; t < ticketAmount; t++) {
 
-                  lot.contract.tickets(pNum, t).then(function (r) {
+                  lot.contract.tickets(pNum, t, function (e, r) {
 
 
                     var el = {};
@@ -265,8 +250,6 @@ export default class Metamask {
                     }
 
 
-                  }).catch(function (e) {
-                    reject(e);
                   })
                 }
 
@@ -290,9 +273,12 @@ export default class Metamask {
 
           self.getContractInstance(gameId).then(function (lot) {
 
-            lot.contract.currentPeriod().then(function (r) {
+            lot.contract.currentPeriod(function (e, r) {
 
-              resolve(self.parseVal('uint256', r[0]));
+              if (e) {
+                reject(e);
+              }
+              resolve(r);
 
             }).catch(function (e) {
               reject(e);
