@@ -4,3 +4,6 @@ node_modules
 /.editorconfig
 /package-lock.json
 .idea/
+solidity/test/
+
+
