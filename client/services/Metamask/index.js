@@ -69,6 +69,42 @@ export default class Metamask {
         })
       },
 
+      initWatcher(gameId, pNum){
+        let self = this;
+
+        return new Promise(function (resolve, reject) {
+
+          $.getJSON(EtherData.abiUrl(gameId), function (data) {
+
+            var MyContract = web3.eth.contract(data.abi);
+            var myContractInstance = MyContract.at(EtherData.address[gameId]);
+
+            console.log('myContractInstance', myContractInstance);
+
+
+            var myEvent = myContractInstance.TicketSelling({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'});
+            myEvent.watch(function(error, result){
+
+              console.log('AAAArrr',result, '---');
+
+            });
+
+// would get all past logs again.
+            var myResults = myEvent.get(function(error, logs){
+
+              console.log('adsaas',logs)
+
+            });
+              console.log('rrrr',myResults);
+
+
+
+          });
+
+
+        })
+      },
+
       byTicket (gameId, nonce, pNum, price) {
 
         let self = this;

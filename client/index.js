@@ -1,5 +1,5 @@
+//import '../node_modules/bootstrap/dist/css/bootstrap.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
-
 import './promise-polyfill'
 import { app } from './app'
 
@@ -11,4 +11,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.$mount('#app')
+
 
