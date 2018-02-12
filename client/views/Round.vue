@@ -31,7 +31,7 @@
           <div class="col-sm-12">
             <div class="row">
               <div v-if="game.period" class="col-sm-4">
-                <h1>#{{roundId}}</h1>
+                <h1 v-bind:style="{ color: '#'+game.period.winnerHash.substring(2, 8) }">#{{roundId}}</h1>
                 <a v-bind:href="'https://rinkeby.etherscan.io/address/'+game.address" target="_blank"
                    style="word-break: break-word; font-size: 10px">{{game.address}}</a>
                 <div class="badge badge-success" v-if="game.currentPeriod == roundId">Текущий Раунд</div>
@@ -51,10 +51,7 @@
                   <h3>Цена билета</h3>
 
                   <h5 class="card-title text-primary">{{game.ticketPrice | eth}}</h5>
-                  <p class="card-text">Куплено <br/> <b>{{game.period.ticketAmount | int}} билета</b>
-                    <!--<br/> Собрано<br/> <b>{{game.period.raised | eth}}</b>
-                    -->
-                  </p>
+
 
 
                 </div>
@@ -80,39 +77,45 @@
 
                 </form>
 
+                <p class="card-text"><!--Куплено <br/> <b>{{game.period.ticketAmount | int}} билета</b>-->
+                  <br/> Банк<br/> <b>{{game.period.raised | eth}}</b>
+                </p>
+
                 <div>
 
                 </div>
               </div>
               <div class="col-sm-5">
-                <div class="alert alert-success" v-if="game.period && game.currentPeriod > roundId">
-                  <p>
-                    Победивший хеш:
-                    <span style="word-break: break-word; font-weight: bold; font-size: 12px">
-                      {{game.period.winnerHash}}
-                    </span> <br/>
-                    Победитель:<br/>
-                    <span style="word-break: break-word; font-weight: bold; font-size: 12px">
 
-                      {{game.period.winnerAddress}}
-                    </span>
-                  </p>
-                </div>
-                <div class="alert alert-primary" v-if="game.period && game.currentPeriod == roundId">
+                <div class=" " v-if="game.period">
 
-                  <h4>Осталось {{game.maxTicketAmount - game.period.ticketAmount | int}}/{{game.maxTicketAmount | int}} билета</h4>
+                  <h4 v-if="game.currentPeriod == roundId">
+                    Осталось {{game.maxTicketAmount - game.period.ticketAmount | int}}/{{game.maxTicketAmount | int}} билета</h4>
+                  <h4 v-if="game.currentPeriod > roundId">Победил хеш</h4>
                   <p v-if="game.tickets && !game.tickets.length">
                     В этом раунде еще не приобретались билеты! Купи первый!
                   </p>
                   <p v-if="game.tickets && game.tickets.length">
-                    Лучший хеш на данный момент:
-                    <span style="word-break: break-word; font-weight: bold; font-size: 12px">
-                      {{game.period.winnerHash}}
-                    </span> <br/>
-                    Владелец:<br/>
+                    <!--Лучший хеш на данный момент:-->
+                    <span v-if="game.currentPeriod == roundId">
+                      Лучший хеш на данный момент:
+                    <br/>
+                    <br/>
+                    </span>
+                                          <cube style="float: left" :hash="game.period.winnerHash"></cube>
                     <span style="word-break: break-word; font-weight: bold; font-size: 12px">
 
-                      {{game.period.winnerAddress}}
+
+
+                    <span  style="vertical-align: top" v-bind:style="{ color: '#'+game.period.winnerHash.substring(2, 8) }">
+                      {{game.period.winnerHash}}
+                    </span>
+                    </span><br/>
+                    Владелец:<br/>
+                    <span style="word-break: break-word;  font-size: 12px">
+                      <a
+                        v-bind:href="'https://rinkeby.etherscan.io/address/'+game.period.winnerAddress"
+                      >{{game.period.winnerAddress}}</a>
                     </span>
                   </p>
 
@@ -130,13 +133,17 @@
             <div>
               <div class="card" v-for="t in game.tickets">
                 <div class="card-body" v-bind:class="{'bg-light-gray': game.period.winnerHash == t.hash}">
-                  <h5 class="card-title"><span style="float: right"> #{{t.number | int}}</span> <span
-                    v-bind:style="{ color: '#'+t.hash.substring(2, 8) }">{{t.hash}}</span></h5>
+                  <h5 class="card-title">
+                    <cube :hash="t.hash"></cube>
+                    <span style="float: right"> #{{t.number | int}}</span>
+                    <span v-bind:style="{ color: '#'+t.hash.substring(2, 8) }">{{t.hash}}</span>
+                  </h5>
                   <!--<h6 class="card-subtitle mb-2 text-muted">
                   </h6>-->
                   <hr/>
-                  <p v-if="t.tx" style="font-size: 12px" class="card-text">Адрес владельца: <span
-                    style="color: gray">{{t.addr}}</span> <br/>
+                  <p v-if="t.tx" style="font-size: 12px" class="card-text">Владелец: <a
+                    v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr"
+                  >{{t.addr}}</a> <br/>
 
                     Транзакция: <a v-bind:href="'https://rinkeby.etherscan.io/tx/'+t.tx.transactionHash"
                                    target="_blank">{{t.tx.transactionHash}}</a></p>
@@ -169,23 +176,26 @@
   import DownloadMetamask from 'components/DownloadMetamask'
   import Metamask from 'services/Metamask';
   import router from '../router';
+  import Cube from 'components/Cube'
 
   const MetamaskService = new Metamask();
 
   export default {
     components: {
-      DownloadMetamask
+      DownloadMetamask,
+      Cube
     },
     created: function () {
       this.init();
     },
 
     beforeDestroy: function () {
-      if (this.interval1) {
-        clearInterval(this.interval1);
+      let self = this;
+      if (self.event.e1) {
+        self.event.e1.stopWatching();
       }
-      if (this.interval2) {
-          clearInterval(this.interval2);
+      if (self.event.e2) {
+        self.event.e2.stopWatching();
       }
     },
     data: function () {
@@ -197,7 +207,8 @@
           currentPeriod: -1
         },
         nonce: '',
-        buyHash: ''
+        buyHash: '',
+        event: {}
 
       }
     },
@@ -238,64 +249,91 @@
       initWatcher: function (event) {
         let self = this;
 
-        if (self.interval1) {
-          clearInterval(self.interval1);
-        }
-        self.interval1 = setInterval(function () {
+        var tagged = 0;
+
+        event.e1.watch(function (error, result) {
+
+          if (result.args.periodNumber == self.roundId) {
+            tagged++;
+          }
+
+          if (tagged > self.game.period.ticketAmount) {
+            console.log('init');
+            self.init();
+          }
+        })
+
+        var finished = 0;
+
+        event.e2.watch(function (error, result) {
 
 
-          event.e1.get(function (error, logs) {
-
-            var count = 0;
-
-            for (var i = 0; i < logs.length; i++) {
-              if (logs[i].args.periodNumber == self.roundId) {
-                count++;
-              }
-            }
-            console.log('ebve1', self.game.period.ticketAmount, count)
-
-
-            if (self.game.period.ticketAmount != count) {
-
-              console.log('ebve2')
-
+          if (result.args.periodNumber == self.roundId) {
+            if (finished > 0) {
               self.init();
-
             }
+          }
+          finished++;
+
+        })
 
 
-          });
-
-        }, 3000);
-
-
-        if (self.interval2) {
-          clearInterval(self.interval2);
-        }
-        self.interval2 = setInterval(function () {
+        /* if (self.interval1) {
+         clearInterval(self.interval1);
+         }
+         self.interval1 = setInterval(function () {
 
 
-          event.e2.get(function (error, logs) {
+         event.e1.get(function (error, logs) {
 
-            var count = logs[logs.length - 1].args.periodNumber;
+         var count = 0;
 
-            console.log('ebve1');
-
-
-
-            if (self.game.currentPeriod == count) {
-
-              console.log('ebve2');
-
-              self.init();
-
-            }
+         for (var i = 0; i < logs.length; i++) {
+         if (logs[i].args.periodNumber == self.roundId) {
+         count++;
+         }
+         }
+         console.log('ebve1', self.game.period.ticketAmount, count)
 
 
-          });
+         if (self.game.period.ticketAmount != count) {
 
-        }, 3000);
+         console.log('ebve2')
+
+         self.init();
+
+         }
+
+
+         });
+
+         }, 3000);
+
+
+         if (self.interval2) {
+         clearInterval(self.interval2);
+         }
+         self.interval2 = setInterval(function () {
+
+
+         event.e2.get(function (error, logs) {
+
+         var count = logs[logs.length - 1].args.periodNumber;
+
+         console.log('ebve1');
+
+         if (self.game.currentPeriod == count) {
+
+         console.log('ebve2');
+
+         self.init();
+
+         }
+
+
+         });
+
+         }, 3000);*/
 
       },
 
@@ -360,6 +398,7 @@
                     }
                   }
 
+                  self.event = event;
                   self.initWatcher(event);
 
 
@@ -397,6 +436,8 @@
   .bg-light-gray {
     background-color: #dadada;
   }
+
+
 </style>
 
 <!--
