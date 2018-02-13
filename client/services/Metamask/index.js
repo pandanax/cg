@@ -280,8 +280,6 @@ export default class Metamask {
               }
               resolve(r);
 
-            }).catch(function (e) {
-              reject(e);
             })
           })
 

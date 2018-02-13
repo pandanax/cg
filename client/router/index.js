@@ -10,6 +10,7 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'hash',
+  //mode: 'history',
   routes: [
     {
       path: '/',
@@ -23,13 +24,15 @@ export default new Router({
       path: '/games',
       component: Games
     },
+
+
     {
       path: '/game/:gameId',
-      component: Game
+      component: Game,
     },
     {
       path: '/game/:gameId/:roundId',
       component: Round
-    }
+    },
   ]
 })

@@ -14,10 +14,29 @@
 </style>
 <script>
   import Navigation from 'components/Navigation'
+  import detectLang from 'detect-browser-language'
+
 
   export default {
     components: {
       Navigation
+    },
+    created: function () {
+
+
+      var s = detectLang();
+      var lng = s.substring(0, 2).toLowerCase();
+
+      if (lng == 'cn') {
+        this.$lang.setLang('cn')
+      } else if (lng == 'ru') {
+        this.$lang.setLang('ru')
+      } else {
+        this.$lang.setLang('en')
+      }
+
+
     }
+
   }
 </script>
