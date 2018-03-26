@@ -40,14 +40,14 @@
 </script>
 <style>
   .cube-outer {
-    width: 64px;
-    height:32px;
+    width: 32px;
+    height: 32px;
     display: inline-block;
-    /*margin-right: 20px;*/
+    /* margin-right: 20px; */
     vertical-align: middle;
     position: relative;
-
     overflow: hidden;
+    border-radius: 16px;
   }
   .cube-in {
     width: 50%;
