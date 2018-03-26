@@ -1,10 +1,10 @@
 <template>
-
-  <div class="row">
+<div>
+  <div v-if="game.$loaded" class="row">
     <div class="col-lg-5">
-      <div class="game-header cap ow">
+      <a v-bind:href="'#/game/' + gameId" class="game-header cap ow">
         {{$lang.messages.game}} {{gameId}}
-      </div>
+      </a>
 
       <div class="game-address bold">
         <a v-bind:href="'https://rinkeby.etherscan.io/address/'+game.address" target="_blank">{{game.address}}</a>
@@ -41,6 +41,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
 
@@ -96,6 +97,9 @@
               self.$set(self.game.period, prop, r[prop]);
             }
 
+            self.$set(self.game, '$loaded', true);
+
+
             console.log('game', self.game.period);
 
 
@@ -110,9 +114,10 @@
 
 
 </script>
-<style>
+<style scoped="">
 
-  .game-header {
+  a.game-header {
+    display: block;
     font-size: 29px;
     color: #1c335a;
     font-weight: bold;

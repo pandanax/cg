@@ -13,11 +13,11 @@
           Galaxy
         </div>
 
-        <div class="header-subtitle cap">
+        <div class="header-subtitle cap font-white">
           Crypto Games
         </div>
 
-        <div class="header-subtitle-2 cap">
+        <div class="header-subtitle-2 cap font-white">
           {{$lang.messages.h1}}
         </div>
 

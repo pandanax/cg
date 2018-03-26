@@ -9,14 +9,14 @@
             <div class="pull-left">
               {{$lang.messages.metamaskStatus[level]}}
             </div>
-            <div class="pull-right" v-if="level == 2">
-              <a class="profile-link" href="">
+            <div class="pull-right" v-if="level == 3">
+              <a class="profile-link" href="#/profile">
                 {{$lang.messages.profile}}
               </a>
             </div>
           </div>
         </div>
-        <div v-bind:class="{'gradient-green':level == 2, 'gradient-red':level == 0, 'gradient-yellow':level == 1}"></div>
+        <div v-bind:class="{'gradient-green':level == 3, 'gradient-red':level == 0, 'gradient-yellow':level == 1 || level == 2}"></div>
 
       </div>
     </div>
@@ -67,6 +67,7 @@
       this.init();
     },
 
+
     data: function () {
       return {
         level: -1,
@@ -78,9 +79,12 @@
     methods: {
       init: function () {
         let self = this;
-        self.level = MetamaskService.detectLevel();
-        self.addr = MetamaskService.getAddr();
-        console.log('lvl', self.level)
+        setTimeout(function () {
+          self.level = MetamaskService.detectLevel();
+          self.addr = MetamaskService.getAddr();
+          console.log('lvl', self.level)
+        },100)
+
       }
     }
   }

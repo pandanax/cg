@@ -10,7 +10,7 @@ module.exports = {
 
   commonJackpot: 'total jackpot',
   game: 'Game',
-  toWin: 'to Win',
+  toWin: 'Win Now',
 
   benefit: 'Owner percent',
   jpp: 'Jackpot percent',
@@ -43,14 +43,20 @@ module.exports = {
   m3: 'Go to current Round',
   m4: 'Current Leader',
   m5: 'Buy the first Ticket in this Round',
-  m6: 'Powered by Ethereum smart-contracts',
+  m6: 'Powered by Ethereum smart-contracts and DApp technology',
 
   metamaskStatus : {
     0: 'Metamsk is not detected',
-    1: 'Metamsk is locked',
-    2: 'Ethereum network is OK'
+    1: 'Wrong Ethereum network',
+    2: 'Metamsk is locked',
+    3: 'Ethereum network is OK'
   },
   profile: 'profile',
+  grules: 'rules and payouts',
+  jackpot: 'Jackpot',
+  hashPhrase: 'Type your hash word'
+
+
 
 
 }

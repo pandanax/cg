@@ -1,10 +1,10 @@
 <template>
 
-  <div>
-    <div v-if="gameId" class="">
+  <div class="description-inside">
+    <!--<div v-if="gameId" class="">
     Вступление к описанию игры, которое будет немного позже. Далее идут дополнительные фишки
 
-    </div>
+    </div>-->
 
     <div>
       {{$lang.messages.currentRound}}: #{{game.currentPeriod | int}}
@@ -19,6 +19,9 @@
     <div>
       {{$lang.messages.stock}}: {{game.maxTicketAmount - game.period.ticketAmount | int}}
     </div>
+    <div>
+      {{$lang.messages.maxTicketAmount}}: {{game.maxTicketAmount | int}}
+    </div>
 
     <div>
       {{$lang.messages.benefit}}: {{game.benefitPercents | int}}%
@@ -30,8 +33,9 @@
       {{$lang.messages.gpp}}: {{100 - game.benefitPercents - game.jackPotPercents | int}}%
     </div>
     <div>
-      {{$lang.messages.maxTicketAmount}}: {{game.maxTicketAmount | int}}
+      {{$lang.messages.jackpot}}: {{game.jackPotFunds | eth}}
     </div>
+
 
     <div v-if="game.period.ticketAmount > 0" class="description-cube-container">
 
@@ -66,4 +70,5 @@
   vertical-align: middle;
   margin-left: 5px;
 }
+
 </style>

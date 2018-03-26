@@ -2,7 +2,7 @@
   <div class="jackpot cap ow">
 
     <div class="container">
-      <div class="jackpot-str">
+      <div class="jackpot-str font-white">
           <span class="jackpot-str-total">
             {{$lang.messages.commonJackpot}}:
           </span>

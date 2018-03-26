@@ -1,36 +1,34 @@
 <template>
   <div>
 
+    <small-header></small-header>
 
-    <p v-if="level == -1">LOADING...</p>
-    <p v-else-if="level == 0">
-      <download-metamask></download-metamask>
-    </p>
-    <p v-else-if="level == 1">
-      акк залочен!
-    </p>
+    <main-nav></main-nav>
 
-    <div v-else-if="level == 2">
-      <!--<div class="row">
-        <div class="col-sm-3">
-          <h1>{{gameId}}</h1>
-        </div>
-        <div class="col-sm-9"></div>
-      </div>-->
+    <div class="bg-white">
+
+    <div class="container">
+      <game-full :game-id="gameId"></game-full>
     </div>
+
+    </div>
+    <main-footer></main-footer>
+
 
   </div>
 </template>
 <script>
-  import DownloadMetamask from 'components/DownloadMetamask'
-  import Metamask from 'services/Metamask';
-  import router from '../router';
-
-  const MetamaskService = new Metamask();
+  import SmallHeader from 'components/SmallHeader'
+  import MainNav from 'components/MainNav'
+  import MainFooter from 'components/MainFooter'
+  import GameFull from 'components/GameFull'
 
   export default {
     components: {
-      DownloadMetamask
+      SmallHeader,
+      MainNav,
+      MainFooter,
+      GameFull
     },
     created: function () {
       this.init();
@@ -39,7 +37,7 @@
     data: function () {
       return {
         level: -1,
-        gameId: 0,
+        gameId: -1,
         currentPeriod: -1
       }
     },
@@ -48,16 +46,7 @@
     methods: {
       init: function () {
         let self = this;
-        self.level = MetamaskService.detectLevel();
         self.gameId = self.$route.params.gameId;
-        MetamaskService.games().getCurRound(self.gameId).then(function (r) {
-
-          router.push({path: '/game/' + self.gameId + '/' + r})
-
-        }).catch(function (r) {
-          console.error(e)
-
-        })
       }
     }
   }

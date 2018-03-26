@@ -46,11 +46,15 @@ module.exports = {
 
   metamaskStatus : {
     0: 'Metamsk is not detected',
-    1: 'Metamsk is locked',
-    2: 'Ethereum network is OK'
+    1: 'Wrong Ethereum network',
+    2: 'Metamsk is locked',
+    3: 'Ethereum network is OK'
   },
 
   profile: 'Личный кабинет',
+  grules: 'Правила игры и размеры выплат',
+  jackpot: 'Джекпот',
+  hashPhrase: 'Введите свою хеш фразу'
 
 }
 

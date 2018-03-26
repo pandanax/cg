@@ -48,9 +48,14 @@ module.exports = {
 
   metamaskStatus : {
     0: 'Metamsk is not detected',
-    1: 'Metamsk is locked',
-    2: 'Ethereum network is OK'
+    1: 'Wrong Ethereum network',
+    2: 'Metamsk is locked',
+    3: 'Ethereum network is OK'
   },
-  profile: 'profile',
+  profile: '轮廓',
+  grules: '规则和支出',
+  jackpot: '头奖',
+  hashPhrase: '输入你的哈希词'
+
 
 }

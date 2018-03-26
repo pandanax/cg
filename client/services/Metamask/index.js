@@ -5,14 +5,20 @@ export default class Metamask {
 
   detectLevel() {
 
+    console.log('check metamask', typeof web3);
+
     let level = 0; //without all
     if (typeof web3 !== 'undefined') {
-
       level = 1; //with metamask
 
-      if (web3.eth.accounts[0]) {
-        level = 2; //with account
+      if (web3.version.network == 4) {
+
+        level = 2;
+        if (web3.eth.accounts[0]) {
+          level = 3; //with account
+        }
       }
+
 
     }
 
@@ -20,6 +26,7 @@ export default class Metamask {
     return level
 
   }
+
   getAddr() {
     let acc = false;
     if (web3 && web3.eth && web3.eth.accounts && web3.eth.accounts[0]) {

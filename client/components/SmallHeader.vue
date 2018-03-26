@@ -16,10 +16,10 @@
             <span class="header-title cap">
               Galaxy
             </span>
-            <span class="header-subtitle cap">
+            <span class="header-subtitle cap font-white">
                 Crypto Games
               </span>
-            <div class="header-subtitle-2 cap">
+            <div class="header-subtitle-2 cap font-white">
               {{$lang.messages.h1}}
             </div>
           </div>

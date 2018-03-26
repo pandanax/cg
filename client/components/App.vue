@@ -30,12 +30,18 @@
   .body {
     /*background-color: #1c335a;*/
     background-color: #000;
-    color: #fff;
+    color: #111;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
 
   .blue-bg {
     background: #1c335a;
+  }
+
+
+  a.font-blue,
+  .font-blue  {
+    color: #1c335a;
   }
 
   .cap {
@@ -81,7 +87,7 @@
 
 
       var s = detectLang();
-      s = 'ru';
+      //s = 'ru';
       //s = 'cn';
       var lng = s.substring(0, 2).toLowerCase();
 
