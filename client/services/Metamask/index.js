@@ -20,6 +20,13 @@ export default class Metamask {
     return level
 
   }
+  getAddr() {
+    let acc = false;
+    if (web3 && web3.eth && web3.eth.accounts && web3.eth.accounts[0]) {
+      acc = web3.eth.accounts[0];
+    }
+    return acc;
+  }
 
   games() {
 

@@ -5,6 +5,7 @@
       <navigation></navigation>
       <a class="btn btn-outline-primary" href="#/profile">Profile</a>
     </div>-->
+    <metamask-status></metamask-status>
     <router-view></router-view>
   </div>
 </template>
@@ -57,16 +58,24 @@
   .bg-white {
     background-color: white;
   }
+  .pull-right {
+    float: right;
+  }
+  .pull-left {
+    float: left;
+  }
 
 </style>
 <script>
   import Navigation from 'components/Navigation'
+  import MetamaskStatus from 'components/MetamaskStatus'
   import detectLang from 'detect-browser-language'
 
 
   export default {
     components: {
-      Navigation
+      Navigation,
+      MetamaskStatus
     },
     created: function () {
 

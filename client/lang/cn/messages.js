@@ -36,6 +36,7 @@ module.exports = {
   bank: '银行',
   transaction: '交易',
   owner: '所有者',
+  partnership: '伙伴关系',
 
 
   m1: '您的门票将在交易成功后添加到列表中',
@@ -43,6 +44,13 @@ module.exports = {
   m3: '去当前回合',
   m4: '领先于本轮',
   m5: '买第一张票',
-  m6: 'Powered by Ethereum smart-contracts'
+  m6: 'Powered by Ethereum smart-contracts',
+
+  metamaskStatus : {
+    0: 'Metamsk is not detected',
+    1: 'Metamsk is locked',
+    2: 'Ethereum network is OK'
+  },
+  profile: 'profile',
 
 }

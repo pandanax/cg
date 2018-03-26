@@ -36,13 +36,21 @@ module.exports = {
   about: 'about',
   question: 'questions',
   follow: 'follow us',
+  partnership: 'partnership',
 
   m1: 'Your Ticket will be added to list after transaction success',
   m2: 'Metamask Account is locked',
   m3: 'Go to current Round',
   m4: 'Current Leader',
   m5: 'Buy the first Ticket in this Round',
-  m6: 'Powered by Ethereum smart-contracts'
+  m6: 'Powered by Ethereum smart-contracts',
+
+  metamaskStatus : {
+    0: 'Metamsk is not detected',
+    1: 'Metamsk is locked',
+    2: 'Ethereum network is OK'
+  },
+  profile: 'profile',
 
 
 }

@@ -1,7 +1,16 @@
 <template>
+  <div>
+    <small-header></small-header>
 
+    <main-nav></main-nav>
 
-    <div class="container">
+    <div>
+      <game-grid></game-grid>
+    </div>
+
+    <main-footer></main-footer>
+
+    <!--<div class="container">
 
 
       <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
@@ -90,8 +99,8 @@
 
 
 
-    </div>
-
+    </div>-->
+  </div>
 </template>
 
 <script>
@@ -101,15 +110,22 @@
   import address from '../ether'
   import router from '../router'
 
+  import GameGrid from 'components/GameGrid'
+  import SmallHeader from 'components/SmallHeader'
+  import MainNav from 'components/MainNav'
+  import MainFooter from 'components/MainFooter'
 
   export default {
     components: {
-    //  Profile
+      GameGrid,
+      SmallHeader,
+      MainNav,
+      MainFooter
     },
     methods: {
-        goToLot: function (x) {
-          router.push({path: 'game/'+x });
-        }
+      goToLot: function (x) {
+        router.push({path: 'game/' + x});
+      }
     }
 
   }
