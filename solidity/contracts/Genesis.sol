@@ -1,6 +1,5 @@
 pragma solidity ^0.4.0;
 
-
 contract Genesis {
 
   event registrationEvent(address addr, address parent);
@@ -43,9 +42,10 @@ contract Genesis {
 
 
   //create first element
-  function Genesis(address genesisAddr, address firstChild) {
+  function Genesis(address firstChild) {
 
-    genesis = genesisAddr;
+    require(msg.sender != firstChild);
+    genesis = msg.sender;
     nicknames[genesis] = 'Genesis';
     parents[genesis] = 0x0;
     customers++;
@@ -55,9 +55,8 @@ contract Genesis {
 
 
   function isNotRegistered(address addr) constant  public returns (bool){
-    require(parents[addr] == 0x0);
-    require(children[addr].length == 0);
-    return true;
+    if (parents[addr] == 0x0 && children[addr].length == 0) return true;
+    return false;
   }
 
   function currentPayment() public constant returns (uint payment){
@@ -102,7 +101,7 @@ contract Genesis {
 
   function registerUser(address child, address parent, string nickname, uint value) private {
     //parent is member (and is not genesis)
-    require(!isNotRegistered(child));
+    require(isNotRegistered(child));
 
     nicknames[child] = nickname;
 
@@ -175,11 +174,6 @@ contract Genesis {
 
   }
 
-
-}
-
-
-contract TransferGenesis is Genesis {
   function transferGenesis(address newGen) public onlyGenesis {
 
     //new genesis is not member
@@ -239,7 +233,10 @@ contract TransferGenesis is Genesis {
     lastActivity[msg.sender] = now;
 
   }
+
+
 }
+
 
 //первые N входов по 0.05 эфир, затем цена наинает логарифмически расти
 //можно докупить себе пропускной способности как бонус на время (по умолчанию 30%, можно сделать 40 50 60 платные)
@@ -247,3 +244,361 @@ contract TransferGenesis is Genesis {
 //можно купить скидку на вход для своих детей как бонус
 //убрать концепт админов
 
+
+
+//первые N входов по 0.05 эфир, затем цена наинает логарифмически расти
+//можно докупить себе пропускной способности как бонус на время (по умолчанию 30%, можно сделать 40 50 60 платные)
+//подумать какие еще временные бонусы могут быть их легко реализовать
+//можно купить скидку на вход для своих детей как бонус
+//убрать концепт админов
+
+//0x910e476b926663afa62f9e5efea048eed5a5c060
+
+/*[
+{
+"anonymous": false,
+"inputs": [
+{
+"indexed": false,
+"name": "addr",
+"type": "address"
+},
+{
+"indexed": false,
+"name": "amount",
+"type": "uint256"
+}
+],
+"name": "getFundsEvent",
+"type": "event"
+},
+{
+"anonymous": false,
+"inputs": [
+{
+"indexed": false,
+"name": "whoDied",
+"type": "address"
+},
+{
+"indexed": false,
+"name": "whoReplaced",
+"type": "address"
+}
+],
+"name": "dieEvent",
+"type": "event"
+},
+{
+"anonymous": false,
+"inputs": [
+{
+"indexed": false,
+"name": "addr",
+"type": "address"
+},
+{
+"indexed": false,
+"name": "parent",
+"type": "address"
+}
+],
+"name": "registrationEvent",
+"type": "event"
+},
+{
+"constant": false,
+"inputs": [],
+"name": "getMine",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [],
+"name": "getMineGenesis",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "admin",
+"type": "address"
+},
+{
+"name": "name",
+"type": "string"
+}
+],
+"name": "registerAdmin",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "parent",
+"type": "address"
+},
+{
+"name": "nickname",
+"type": "string"
+}
+],
+"name": "registration",
+"outputs": [],
+"payable": true,
+"stateMutability": "payable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "child",
+"type": "address"
+}
+],
+"name": "transferChildren",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "newGen",
+"type": "address"
+}
+],
+"name": "transferGenesis",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"inputs": [
+{
+"name": "firstChild",
+"type": "address"
+}
+],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "constructor"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "capital",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "address"
+},
+{
+"name": "",
+"type": "uint256"
+}
+],
+"name": "children",
+"outputs": [
+{
+"name": "",
+"type": "address"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "currentPayment",
+"outputs": [
+{
+"name": "payment",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "customers",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "deadLine",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "address"
+}
+],
+"name": "funds",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "genesis",
+"outputs": [
+{
+"name": "",
+"type": "address"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "addr",
+"type": "address"
+}
+],
+"name": "isNotRegistered",
+"outputs": [
+{
+"name": "",
+"type": "bool"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "address"
+}
+],
+"name": "lastActivity",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "myAvailableFunds",
+"outputs": [
+{
+"name": "myFunds",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "address"
+}
+],
+"name": "nicknames",
+"outputs": [
+{
+"name": "",
+"type": "string"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "address"
+}
+],
+"name": "parents",
+"outputs": [
+{
+"name": "",
+"type": "address"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+}
+]*/
