@@ -16,7 +16,12 @@ Vue.filter('trm', function (value) {
 
 });
 Vue.filter('bytes', function (value) {
+  if (value)
   return value.substr(0,18)
+});
+Vue.filter('addr', function (value) {
+  if (value)
+  return value.substr(0,6)+ '...'+value.substr(value.length-3,2);
 });
 Vue.filter('int', function (value) {
 

@@ -5,7 +5,7 @@
     <main-nav></main-nav>
 
     <div>
-      <main-profile></main-profile>
+      <main-stat></main-stat>
     </div>
 
     <main-footer></main-footer>
@@ -23,7 +23,7 @@
 
   import SmallHeader from 'components/SmallHeader'
   import MainNav from 'components/MainNav'
-  import MainProfile from 'components/MainProfile'
+  import MainStat from 'components/MainStat'
   import MainFooter from 'components/MainFooter'
 
   export default {
@@ -31,12 +31,12 @@
       SmallHeader,
       MainNav,
       MainFooter,
-      MainProfile
+      MainStat
     },
     methods: {
       /*goToLot: function (x) {
-       router.push({path: 'game/' + x});
-       }*/
+        router.push({path: 'game/' + x});
+      }*/
     }
 
   }

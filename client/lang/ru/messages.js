@@ -2,12 +2,15 @@ module.exports = {
 
   h1: 'криптоигры с неизбежным выигрышем',
   h2: 'играть в один клик',
+  date: 'дата',
 
   menu1: 'все игры',
   menu2: 'статистика выигрышей',
   menu3: 'как сдесь играть',
   menu4: 'помощь/faq',
 
+  shopHistory: 'история покупок',
+  winHistory: 'история выигрышей',
   commonJackpot: 'общий джекпот',
   game: 'Игра',
   toWin: 'Выиграть',
@@ -29,6 +32,7 @@ module.exports = {
   ticketPrice: 'Цена билета',
   transactionHash: 'Хеш транзакции',
   currentRound: 'Текущий Раунд',
+  round: 'Раунд',
   roundFinished: 'Раунд завершен',
   roundNotBegun: 'Раунд еще не начался',
   winner: 'Победитель',

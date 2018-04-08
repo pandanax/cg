@@ -2,12 +2,15 @@ module.exports = {
 
   h1: 'cryptogames with inevitable winnings',
   h2: 'play one click',
+  date: 'date',
 
   menu1: 'all games',
   menu2: 'statistics of winnings',
   menu3: 'how to play',
   menu4: 'faq',
 
+  shopHistory: 'purchase history',
+  winHistory: 'gain history',
   commonJackpot: 'total jackpot',
   game: 'Game',
   toWin: 'Win Now',
@@ -22,6 +25,7 @@ module.exports = {
   hello_world : 'Hellow World!',
   ticketPrice: 'Ticket Price',
   transactionHash: 'Transaction Hash',
+  round: 'Round',
   currentRound: 'Сurrent Round',
   roundFinished: 'Round Finished',
   roundNotBegun: 'Round has not begun',

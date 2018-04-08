@@ -37,7 +37,7 @@
     </div>
 
 
-    <div v-if="game.period.ticketAmount > 0" class="description-cube-container cap ">
+    <div v-if="game.period.ticketAmount > 0 && game.period.finished" class="description-cube-container cap ">
 
       <cube :hash="game.period.winnerHash"></cube>
       <span>

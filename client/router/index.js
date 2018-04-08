@@ -5,6 +5,7 @@ import Profile from '../views/Profile'
 import Games from '../views/Games'
 import Game from '../views/Game'
 import Round from '../views/Round'
+import Stat from '../views/Stat'
 
 Vue.use(Router)
 
@@ -24,7 +25,10 @@ export default new Router({
       path: '/games',
       component: Games
     },
-
+    {
+      path: '/stat',
+      component: Stat
+    },
 
     {
       path: '/game/:gameId',

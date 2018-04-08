@@ -6,7 +6,7 @@
           <a href="#/games">{{$lang.messages.menu1}}</a>
         </li>
         <li>
-          <a href>{{$lang.messages.menu2}}</a>
+          <a href="#/stat">{{$lang.messages.menu2}}</a>
         </li>
         <li>
           <a href>{{$lang.messages.menu3}}</a>

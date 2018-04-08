@@ -1,80 +1,89 @@
 <template>
-  <table class="cap table table-sm table-striped">
-    <thead>
-    <tr class="ow font-blue">
-      <th class="cursor-pointer" v-on:click="setSort('number')">
-        <span class="float-right">
+  <div>
+
+    <div v-if="!orderedTickets.length" class="cap ow font-blue">
+      {{$lang.messages.m5}}
+    </div>
+
+    <table class="cap table table-sm table-striped">
+      <thead v-if="orderedTickets.length">
+      <tr class="ow font-blue">
+        <th class="cursor-pointer" v-on:click="setSort('number')">
+        <span>
         <span>#</span>
-        <span  class="tab-arrows">
+        <span class="tab-arrows">
 
 
           <div v-show="sort.name != 'number' || (sort.name == 'number' && sort.order == 'asc')" class="arrow-up"></div>
-          <div v-show="sort.name != 'number' || (sort.name == 'number' && sort.order == 'desc')" class="arrow-down"></div>
+          <div v-show="sort.name != 'number' || (sort.name == 'number' && sort.order == 'desc')"
+               class="arrow-down"></div>
 
         </span>
         </span>
-      </th>
-      <th></th>
-      <th class="cursor-pointer" v-on:click="setSort('hash')">
-        {{$lang.messages.hash}}
-        <span  class="tab-arrows">
+        </th>
+        <th></th>
+        <th class="cursor-pointer" v-on:click="setSort('hash')">
+          {{$lang.messages.hash}}
+          <span class="tab-arrows">
 
 
           <div v-show="sort.name != 'hash' || (sort.name == 'hash' && sort.order == 'asc')" class="arrow-up"></div>
           <div v-show="sort.name != 'hash' || (sort.name == 'hash' && sort.order == 'desc')" class="arrow-down"></div>
 
         </span>
-      </th>
-      <th>
-        {{$lang.messages.player}}
-      </th>
-      <th>
-        {{$lang.messages.ticketPrice}}
-      </th>
-    </tr>
-    </thead>
-    <tbody>
+        </th>
+        <th>
+          {{$lang.messages.player}}
+        </th>
+        <th>
+          {{$lang.messages.ticketPrice}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
 
-    <tr v-bind:class="{'winner': game.period.winnerHash == t.hash && game.period.finished}" v-if="t && t.hash"
-        v-for="t in orderedTickets">
-      <td><span v-if="t.number >= 0" style="float: right"> #{{t.number | int}}</span></td>
-      <td>
-        <div class="table-cube-padding">
+      <tr v-bind:class="{'winner': game.period.winnerHash == t.hash && game.period.finished}" v-if="t && t.hash"
+          v-for="t in orderedTickets">
+        <td><span v-if="t.number >= 0"> #{{t.number | int}}</span></td>
+        <td>
+          <div class="table-cube-padding">
 
-          <cube :hash="t.hash"></cube>
+            <cube :hash="t.hash"></cube>
 
-        </div>
-      </td>
-      <td><span>{{t.hash | bytes}}</span></td>
-      <td>
-        {{t.addr}}
-        <!--<a
-          v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>-->
-      </td>
-      <td>
-        {{game.ticketPrice | eth}}
-      </td>
-      <!--<hr/>
-      <div v-if="t.tx && t.tx.args">
+          </div>
+        </td>
+        <td><span>{{t.hash | bytes}}</span></td>
+        <td>
+          {{t.addr}}
+          <!--<a
+            v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>-->
+        </td>
+        <td>
+          {{game.ticketPrice | eth}}
+        </td>
 
-        <div style="float: right">{{t.tx.args.when | sdate}} {{t.tx.args.when | stime}}</div>
-        <div style="font-size: 12px" class="card-text">        {{$lang.messages.owner}}:
-          <a
-          v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>
-          <br/>
+        <!--<hr/>
+        <div v-if="t.tx && t.tx.args">
 
-          {{$lang.messages.transaction}}:
-          <a v-bind:href="'https://rinkeby.etherscan.io/tx/'+t.tx.transactionHash"
-                         target="_blank">{{t.tx.transactionHash}}</a>
-        </div>
+          <div style="float: right">{{t.tx.args.when | sdate}} {{t.tx.args.when | stime}}</div>
+          <div style="font-size: 12px" class="card-text">        {{$lang.messages.owner}}:
+            <a
+            v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>
+            <br/>
 
-      </div>-->
+            {{$lang.messages.transaction}}:
+            <a v-bind:href="'https://rinkeby.etherscan.io/tx/'+t.tx.transactionHash"
+                           target="_blank">{{t.tx.transactionHash}}</a>
+          </div>
 
-    </tr>
+        </div>-->
 
-    </tbody>
+      </tr>
 
-  </table>
+      </tbody>
+
+    </table>
+  </div>
 </template>
 <script>
   import Cube from 'components/Cube'
@@ -110,36 +119,28 @@
       return {
         level: -1,
         sort: {
-            name: 'number',
-            order: 'desc'
+          name: 'number',
+          order: 'desc'
         }
       }
     },
 
 
     methods: {
-        setSort: function (name) {
+      setSort: function (name) {
 
 
-          if (this.sort.name == name) {
-              console.log('1')
-            if (this.sort.order == 'asc') {
-              console.log('3')
-
-              this.sort.order ='desc'
-            } else {
-              console.log('4')
-
-              this.sort.order = 'asc'
-            }
+        if (this.sort.name == name) {
+          if (this.sort.order == 'asc') {
+            this.sort.order = 'desc'
           } else {
-            console.log('2')
-
-            this.sort.name = name;
-              this.sort.order = 'asc';
+            this.sort.order = 'asc'
           }
-          console.log('set sort', this.sort)
-        },
+        } else {
+          this.sort.name = name;
+          this.sort.order = 'asc';
+        }
+      },
       init: function () {
         let self = this;
         return MetamaskService.games().getTicketFields(self.gameId, self.roundId, self.game.period.ticketAmount).then(function (r) {
@@ -149,16 +150,16 @@
 
           /*r = r.sort(function (a, b) {
 
-            if (parseInt(a.number) < parseInt(b.number)) {
-              return 1;
-            }
-            if (parseInt(a.number) > parseInt(b.number)) {
-              return -1;
-            }
-            // a должно быть равным b
-            return 0;
+           if (parseInt(a.number) < parseInt(b.number)) {
+           return 1;
+           }
+           if (parseInt(a.number) > parseInt(b.number)) {
+           return -1;
+           }
+           // a должно быть равным b
+           return 0;
 
-          })*/
+           })*/
 
           for (var i = 0; i < r.length; i++) {
             r[i].number = parseInt(r[i].number);
@@ -199,15 +200,9 @@
   }
 </script>
 <style>
-  .winner:before {
-    content: 'Winner';
-    position: absolute;
-    z-index: 1;
-    right: 20px;
-    top: -7px;
-    font-size: 26px;
-    line-height: 120px;
-    opacity: 0.2;
+  .table-striped tbody tr:nth-of-type(odd).winner,
+  .winner {
+    background-color: #ffa800;
   }
 
 </style>

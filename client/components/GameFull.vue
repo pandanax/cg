@@ -6,7 +6,6 @@
     <b-modal id="modal" title="Transaction has been sent" hide-footer>
 
 
-
       <a class="font-sm" v-bind:href="'https://rinkeby.etherscan.io/tx/'+buyHash"
          target="_blank">
         {{buyHash}}
@@ -29,7 +28,7 @@
               <div class="pull-left">
 
             <span v-bind:href="'#/game/' + gameId" class="game-header cap ow">
-              {{$lang.messages.game}} {{gameId}}
+              {{$lang.messages.game}} {{gameId}}#{{currentPeriod}}
             </span>
               </div>
               <div class="pull-left">
@@ -68,7 +67,7 @@
             <div class="sec-str">
 
               <div class="current-round cap ow bold font-white">
-                {{$lang.messages.currentRound}} #{{game.currentPeriod}}
+                {{$lang.messages.round}} #{{currentPeriod}}
               </div>
               <div class="tickets-left cap ow bold font-white">
                 {{$lang.messages.stock}}: {{game.maxTicketAmount - game.period.ticketAmount | int}}
@@ -79,8 +78,10 @@
               {{$lang.messages.bank}}: {{game.period.raised | eth}}
             </div>
 
-
-            <form class="input-form ">
+            <div v-if="game.period && game.period.finished" class="text-finished cap ow bold font-yellow">
+              {{$lang.messages.roundFinished}}
+            </div>
+            <form v-else-if="game.period" class="input-form ">
               <label class="ow cap font-blue">{{$lang.messages.hashPhrase}}:</label>
               <input type="text" v-model="nonce"/>
               <a v-on:click="buy" class="game-win-btn bg-yellow cap ow" href>
@@ -92,9 +93,14 @@
         </div>
       </div>
       <div class="ticket-container">
-        <main-tickets :game="game" :game-id="gameId" :roundId="game.currentPeriod"></main-tickets>
+        <main-tickets :game="game" :game-id="gameId" :roundId="currentPeriod"></main-tickets>
       </div>
-      <!--<div class="maket"></div>-->
+      <div class="pagination">
+        <div v-bind:class="{'active':currentPeriod == index}" v-if="game" v-on:click="loadRound(index)" class="page" v-for="(n,index) in game.currentPeriod*1 + 1">
+
+          #{{index}}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -103,6 +109,7 @@
 
   import GameDescription from 'components/GameDescription';
   import MainTickets from 'components/MainTickets';
+  import router from '../router'
 
   import Metamask from 'services/Metamask';
   const MetamaskService = new Metamask();
@@ -134,52 +141,67 @@
         nonce: '',
         buyHash: ''
 
-    }
+      }
     },
 
 
     methods: {
+      loadRound: function (round) {
+        let self = this;
 
-        buy: function (e) {
-          let self = this;
+        //e.preventDefault();
+        self.$router.push({path: '/game/' + self.gameId, query: {round: round.toString()}});
+        self.init();
 
-          e.preventDefault();
+      },
 
+      buy: function (e) {
+        let self = this;
 
-          let promise = MetamaskService.games().byTicket(self.gameId, self.nonce, self.game.currentPeriod, self.game.ticketPrice)
-            promise.then(function (r,a) {
-
-                console.log('ra',r,a);
-
-            self.buyHash = r;
-
-            self.$root.$emit('bv::show::modal', 'modal');
-
-            self.nonce = '';
-
-          }).catch(function (e) {
+        e.preventDefault();
 
 
-            console.error(e);
-          });
+        let promise = MetamaskService.games().byTicket(self.gameId, self.nonce, self.game.currentPeriod, self.game.ticketPrice)
+        promise.then(function (r, a) {
 
-          return false
+          console.log('ra', r, a);
 
-        },
+          self.buyHash = r;
+
+          self.$root.$emit('bv::show::modal', 'modal');
+
+          self.nonce = '';
+
+        }).catch(function (e) {
+
+
+          console.error(e);
+        });
+
+        return false
+
+      },
 
       init: function (init) {
 
         let self = this;
 
+        if (this.interval) clearTimeout(this.interval);
+
         self.updateView();
 
+        if (this.$route.query.round) {
+          self.currentPeriod = this.$route.query.round;
+        }
 
         return MetamaskService.games().getGameFields(self.gameId).then(function (r) {
 
 
-          let currentPeriod = parseInt(r['currentPeriod']);
+          if (self.currentPeriod == -1) {
+            self.currentPeriod = parseInt(r['currentPeriod']);
+          }
 
-          return MetamaskService.games().getPeriodFields(self.gameId, currentPeriod).then(function (r2) {
+          return MetamaskService.games().getPeriodFields(self.gameId, self.currentPeriod).then(function (r2) {
 
             if (init) self.$set(self, 'game', {});
 
@@ -199,7 +221,6 @@
             }
 
 
-
             self.$set(self.game, '$loaded', true);
 
             self.$root.$emit('app::tickets::update');
@@ -212,11 +233,10 @@
       },
       updateView: function () {
 
-            console.log('updat')
+        console.log('updat')
 
         var self = this;
         self.interval = setTimeout(self.init, 20000);
-
 
 
       }
@@ -352,7 +372,28 @@
   }
 
   .ticket-container {
-    padding: 80px 0;
+    padding: 75px 0 20px;
   }
+
+  .pagination {
+    padding-bottom: 75px;
+  }
+
+  .pagination .page.active,
+  .pagination .page:hover {
+    background: #ffa800;
+    /*color: #fff;*/
+  }
+  .pagination .page {
+    background: #afbfda;
+    padding: 10px;
+    color: #000;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+.text-finished {
+  text-align: center;
+  font-size: 40px;
+}
 
 </style>

@@ -34,6 +34,12 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
 
+  .content {
+    background: #fff;
+    color: #000;
+    padding: 40px 0;
+  }
+
   .blue-bg {
     background: #1c335a;
   }
@@ -137,6 +143,14 @@
 
   .font-sm {
     font-size: 10px;
+  }
+
+  .table tr th:first-child,
+  .table tr td:first-child {
+    padding-left: 8px;
+  }
+  .table thead th {
+    border-bottom: none;
   }
 
 

@@ -22,6 +22,8 @@ Vue.use(localization);
 
 sync(store, router)
 
+
+
 const app = new Vue({
   router,
   store,

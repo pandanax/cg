@@ -60,14 +60,5 @@
   }
 </script>
 <style>
-  .winner:before {
-    content: 'Winner';
-    position: absolute;
-    z-index: 1;
-    right: 20px;
-    top: -7px;
-    font-size: 26px;
-    line-height: 120px;
-    opacity: 0.2;
-  }
+
 </style>
