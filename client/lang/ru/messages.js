@@ -22,6 +22,9 @@ module.exports = {
   question: 'Задать вопрос',
   follow: 'Следите за нами',
 
+  hash: 'Хеш',
+  player: 'Игрок',
+
   hello_world : 'Привет мир!',
   ticketPrice: 'Цена билета',
   transactionHash: 'Хеш транзакции',

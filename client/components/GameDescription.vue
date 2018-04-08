@@ -37,11 +37,11 @@
     </div>
 
 
-    <div v-if="game.period.ticketAmount > 0" class="description-cube-container">
+    <div v-if="game.period.ticketAmount > 0" class="description-cube-container cap ">
 
       <cube :hash="game.period.winnerHash"></cube>
       <span>
-        {{game.period.winnerHash.substr(0,10)}}
+        {{game.period.winnerHash | bytes}}
       </span>
     </div>
 
@@ -70,5 +70,10 @@
   vertical-align: middle;
   margin-left: 5px;
 }
+
+  .description-cube-container .cube-outer {
+    width: 32px;
+    height: 32px;
+  }
 
 </style>

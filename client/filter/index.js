@@ -15,6 +15,9 @@ Vue.filter('trm', function (value) {
   return value/1000000000000000000 + ' TRM';
 
 });
+Vue.filter('bytes', function (value) {
+  return value.substr(0,18)
+});
 Vue.filter('int', function (value) {
 
   return value*1;

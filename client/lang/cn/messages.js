@@ -22,6 +22,8 @@ module.exports = {
   about: '关于游戏',
   question: '问题',
   follow: '关注我们',
+  hash: '哈希',
+  player: '播放机',
 
 
   hello_world: '你好，世界',

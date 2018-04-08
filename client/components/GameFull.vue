@@ -1,6 +1,22 @@
 <template>
 
   <div>
+
+
+    <b-modal id="modal" title="Transaction has been sent" hide-footer>
+
+
+
+      <a class="font-sm" v-bind:href="'https://rinkeby.etherscan.io/tx/'+buyHash"
+         target="_blank">
+        {{buyHash}}
+      </a>
+      <br/>
+      <small>
+        {{$lang.messages.m1}}
+      </small>
+    </b-modal>
+
     <div class="game-container" v-if="game.$loaded">
       <div class="row">
         <div class="col-lg-6">
@@ -66,8 +82,8 @@
 
             <form class="input-form ">
               <label class="ow cap font-blue">{{$lang.messages.hashPhrase}}:</label>
-              <input type="text" v-model="hash"/>
-              <a class="game-win-btn bg-yellow cap ow" href>
+              <input type="text" v-model="nonce"/>
+              <a v-on:click="buy" class="game-win-btn bg-yellow cap ow" href>
                 {{$lang.messages.toWin}}
               </a>
             </form>
@@ -103,6 +119,11 @@
       this.init();
     },
 
+    beforeDestroy: function () {
+      console.log('destr')
+
+      if (this.interval) clearTimeout(this.interval);
+    },
     data: function () {
       return {
         level: -1,
@@ -110,43 +131,92 @@
         game: {
           period: {}
         },
-        hash: ''
-      }
+        nonce: '',
+        buyHash: ''
+
+    }
     },
 
 
     methods: {
-      init: function () {
+
+        buy: function (e) {
+          let self = this;
+
+          e.preventDefault();
+
+
+          let promise = MetamaskService.games().byTicket(self.gameId, self.nonce, self.game.currentPeriod, self.game.ticketPrice)
+            promise.then(function (r,a) {
+
+                console.log('ra',r,a);
+
+            self.buyHash = r;
+
+            self.$root.$emit('bv::show::modal', 'modal');
+
+            self.nonce = '';
+
+          }).catch(function (e) {
+
+
+            console.error(e);
+          });
+
+          return false
+
+        },
+
+      init: function (init) {
 
         let self = this;
 
+        self.updateView();
+
+
         return MetamaskService.games().getGameFields(self.gameId).then(function (r) {
 
-          for (var prop in r) {
-            self.$set(self.game, prop, r[prop]);
-          }
 
-          console.log('game', self.game);
+          let currentPeriod = parseInt(r['currentPeriod']);
 
-          self.game.currentPeriod = parseInt(self.game.currentPeriod);
+          return MetamaskService.games().getPeriodFields(self.gameId, currentPeriod).then(function (r2) {
 
-          return MetamaskService.games().getPeriodFields(self.gameId, self.game.currentPeriod).then(function (r) {
+            if (init) self.$set(self, 'game', {});
+
+
+            self.game.currentPeriod = parseInt(r['currentPeriod']);
+
+
+            for (var prop in r) {
+              self.$set(self.game, prop, r[prop]);
+            }
+
 
             self.$set(self.game, 'period', {});
 
-            for (var prop in r) {
-              self.$set(self.game.period, prop, r[prop]);
+            for (var prop in r2) {
+              self.$set(self.game.period, prop, r2[prop]);
             }
+
 
 
             self.$set(self.game, '$loaded', true);
 
-
-            console.log('game', self.game.period);
+            self.$root.$emit('app::tickets::update');
 
 
           })
         })
+
+
+      },
+      updateView: function () {
+
+            console.log('updat')
+
+        var self = this;
+        self.interval = setTimeout(self.init, 20000);
+
 
 
       }

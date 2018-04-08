@@ -83,8 +83,8 @@ export default class Metamask {
 
             resolve(
               {
-                e1: myContractInstance.TicketSelling({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'}),
-                e2: myContractInstance.PeriodFinished({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'})
+                TicketSelling: myContractInstance.TicketSelling({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'}),
+                PeriodFinished: myContractInstance.PeriodFinished({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'})
               }
             );
 
@@ -103,7 +103,8 @@ export default class Metamask {
 
         return new Promise(function (resolve, reject) {
 
-          self.getContractInstance(gameId).then(function (lot) {
+          let promise = self.getContractInstance(gameId)
+          promise.then(function (lot) {
 
             lot.contract.buyTicket(pNum, nonce, {
               from: web3.eth.accounts[0],
@@ -123,7 +124,8 @@ export default class Metamask {
 
       },
 
-      getGameFields (gameId) {
+      getGameFields(gameId)
+      {
 
         let self = this;
 
@@ -161,10 +163,12 @@ export default class Metamask {
           })
         })
 
-      },
+      }
+      ,
 
 
-      getPeriodFields (gameId, pNum) {
+      getPeriodFields(gameId, pNum)
+      {
 
         let self = this;
 
@@ -212,10 +216,12 @@ export default class Metamask {
 
         });
 
-      },
+      }
+      ,
 
 
-      getTicketFields (gameId, pNum, ticketAmount) {
+      getTicketFields(gameId, pNum, ticketAmount)
+      {
 
         let self = this;
 
@@ -277,9 +283,11 @@ export default class Metamask {
 
         });
 
-      },
+      }
+      ,
 
-      getCurRound (gameId) {
+      getCurRound(gameId)
+      {
 
         let self = this;
 

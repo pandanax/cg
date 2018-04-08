@@ -71,6 +71,76 @@
     float: left;
   }
 
+
+  .table th {
+    font-size: 18px;
+    font-weight: normal;
+  }
+  .table td {
+    font-size: 14px;
+  }
+  .table th, .table td {
+    border-top: none;
+    padding: 0;
+    line-height: 32px;
+  }
+  .table td .cube-outer {
+    width: 100%;
+    height: 100%;
+  }
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #afbfda;
+  }
+  .table td .table-cube-padding {
+    margin: 0 10px;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    line-height: 28px;
+    float: right;
+  }
+
+
+  .table th.cursor-pointer {
+    cursor: pointer;
+  }
+  .table th .tab-arrows {
+    display: inline-block;
+    height: 12px;
+    width: 5px;
+    line-height: 32px;
+    position: relative;
+    cursor: pointer;
+  }
+  .table th .tab-arrows .arrow-down{
+    margin-top: 2px;
+  }
+
+
+  .arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+
+    border-bottom: 5px solid;
+  }
+
+  .arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+
+    border-top: 5px solid;
+  }
+
+  .font-sm {
+    font-size: 10px;
+  }
+
+
+
 </style>
 <script>
   import Navigation from 'components/Navigation'

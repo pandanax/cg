@@ -34,7 +34,7 @@
           {{$lang.messages.bank}}: {{game.period.raised | eth}}
         </div>
 
-        <a class="game-win-btn bg-yellow cap ow" href>
+        <a class="game-win-btn bg-yellow cap ow" v-bind:href="'#/game/'+gameId">
           {{$lang.messages.toWin}}
         </a>
 

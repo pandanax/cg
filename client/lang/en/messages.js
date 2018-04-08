@@ -36,6 +36,10 @@ module.exports = {
   about: 'about',
   question: 'questions',
   follow: 'follow us',
+  hash: 'Hash',
+  player: 'Player',
+
+
   partnership: 'partnership',
 
   m1: 'Your Ticket will be added to list after transaction success',
