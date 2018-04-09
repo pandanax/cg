@@ -37,7 +37,7 @@
   .content {
     background: #fff;
     color: #000;
-    padding: 40px 0;
+    padding: 40px 0 80px;
   }
 
   .blue-bg {
@@ -153,13 +153,16 @@
     border-bottom: none;
   }
 
+  .page-header {
+    font-size: 36px;
+  }
 
 
 </style>
 <script>
   import Navigation from 'components/Navigation'
   import MetamaskStatus from 'components/MetamaskStatus'
-  import detectLang from 'detect-browser-language'
+  /*import detectLang from 'detect-browser-language'*/
 
 
   export default {
@@ -170,7 +173,11 @@
     created: function () {
 
 
-      var s = detectLang();
+      var s =
+      (navigator.languages && navigator.languages[0]) ||
+      navigator.language ||
+      navigator.userLanguage;
+
       //s = 'ru';
       //s = 'cn';
       var lng = s.substring(0, 2).toLowerCase();

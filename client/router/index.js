@@ -6,6 +6,8 @@ import Games from '../views/Games'
 import Game from '../views/Game'
 import Round from '../views/Round'
 import Stat from '../views/Stat'
+import How from '../views/How'
+import Faq from '../views/Faq'
 
 Vue.use(Router)
 
@@ -38,5 +40,13 @@ export default new Router({
       path: '/game/:gameId/:roundId',
       component: Round
     },
+    {
+      path: '/how',
+      component: How
+    },
+    {
+      path: '/faq',
+      component: Faq
+    }
   ]
 })

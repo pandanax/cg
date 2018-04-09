@@ -7,6 +7,7 @@
 
         <div class="header-space"></div>
 
+
         <div class="eth-symbol"></div>
 
         <div class="header-title cap">
@@ -17,11 +18,12 @@
           Crypto Games
         </div>
 
+
         <div class="header-subtitle-2 cap font-white">
           {{$lang.messages.h1}}
         </div>
 
-        <a href class="header-main-button cap">
+        <a href="#/game/1" class="header-main-button cap">
           {{$lang.messages.h2}}
         </a>
 

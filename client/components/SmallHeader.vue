@@ -13,12 +13,14 @@
             <div class="eth-symbol"></div>
           </div>-->
           <div class=" title-line">
+            <a class="no-decorate" href="/">
             <span class="header-title cap">
               Galaxy
             </span>
             <span class="header-subtitle cap font-white">
                 Crypto Games
               </span>
+            </a>
             <div class="header-subtitle-2 cap font-white">
               {{$lang.messages.h1}}
             </div>
@@ -136,6 +138,12 @@
     line-height: 25px;
     letter-spacing: 5px;
 
+
+  }
+  .no-decorate:hover {
+    text-decoration: none;
+  }
+  .no-decorate {
 
   }
 </style>

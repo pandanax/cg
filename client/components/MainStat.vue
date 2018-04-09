@@ -138,10 +138,10 @@
         level: -1,
         logs: [],
         sort: {
-          name: 'hash',
+          name: 'when',
           order: 'desc'
         },
-        gamePrices: [0.01, 0.03, 0.1, 0.5 ]
+        gamePrices: [0, 0.01, 0.03, 0.1, 0.5 ]
       }
     },
     created: function () {

@@ -252,11 +252,11 @@
         tab: 0,
         sort: {
           logs: {
-            name: 'hash',
+            name: 'when',
             order: 'desc'
           },
           tickets: {
-            name: 'hash',
+            name: 'when',
             order: 'desc'
           }
         },

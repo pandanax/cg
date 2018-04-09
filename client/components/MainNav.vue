@@ -9,10 +9,10 @@
           <a href="#/stat">{{$lang.messages.menu2}}</a>
         </li>
         <li>
-          <a href>{{$lang.messages.menu3}}</a>
+          <a href="#/how">{{$lang.messages.menu3}}</a>
         </li>
         <li>
-          <a href>{{$lang.messages.menu4}}</a>
+          <a href="#/faq">{{$lang.messages.menu4}}</a>
         </li>
       </ul>
     </div>

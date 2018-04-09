@@ -74,7 +74,12 @@ module.exports = {
       {
         from: _.cwd('./static'),
         // to the root of dist path
-        to: './'
+        to: './static'
+      },
+      {
+        from: _.cwd('./solidity/build'),
+        // to the root of dist path
+        to: './solidity/build'
       }
     ])
   ],
