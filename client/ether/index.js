@@ -432,10 +432,14 @@ let abi = [
 
 
 export default {
-  key: '199YVXGQ54J8V7SXV1AQJPM4ETB8BMAVDX',
+  infuraKey: 'G6PuVMBuzi94Jru69sAz',
+  etherscanKey: '199YVXGQ54J8V7SXV1AQJPM4ETB8BMAVDX', //api key for etherscan
   contracts: {
     1: {
-      sort: 0, address: '0x5520148407fe16c273e67a4c32173d08350103f4', abi: abi
+      sort: 0, address: '0x5520148407fe16c273e67a4c32173d08350103f4', abi: abi, price: 0.003
+    },
+    2: {
+      sort: 1, address: '0x5c7dc03d83fd259d50537da25ae338f135458b73', abi: abi, price: 0.01
     }
     /*2: '0xecd5f600fae1f202b60a04b52213225d0671253c',
      3: '0x103da18857d02861b008e56b0513d08b8752af6d',

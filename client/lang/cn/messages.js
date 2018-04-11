@@ -52,7 +52,7 @@ module.exports = {
   m5: '买第一张票',
   m6: 'Powered by Ethereum smart-contracts',
 
-  metamaskStatus : {
+  metamaskStatus: {
     0: 'Metamsk is not detected',
     1: 'Wrong Ethereum network',
     2: 'Metamsk is locked',
@@ -61,7 +61,11 @@ module.exports = {
   profile: '轮廓',
   grules: '规则和支出',
   jackpot: '头奖',
-  hashPhrase: '输入你的哈希词'
+  hashPhrase: '输入你的哈希词',
+
+  t1: '您可以通过发送购买机票',
+  t2: '到ethereum地址',
+  t3: '在交易数据中指定您的唯一哈希短语，例如:'
 
 
 }

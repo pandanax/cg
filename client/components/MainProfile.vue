@@ -35,10 +35,12 @@
             <span class="tab-arrows">
 
 
-              <div v-show="sort.tickets.name != 'gameId' || (sort.tickets.name == 'gameId' && sort.tickets.order == 'asc')"
-                   class="arrow-up"></div>
-              <div v-show="sort.tickets.name != 'gameId' || (sort.tickets.name == 'gameId' && sort.tickets.order == 'desc')"
-                   class="arrow-down"></div>
+              <div
+                v-show="sort.tickets.name != 'gameId' || (sort.tickets.name == 'gameId' && sort.tickets.order == 'asc')"
+                class="arrow-up"></div>
+              <div
+                v-show="sort.tickets.name != 'gameId' || (sort.tickets.name == 'gameId' && sort.tickets.order == 'desc')"
+                class="arrow-down"></div>
 
              </span>
           </th>
@@ -51,7 +53,8 @@
             <span class="tab-arrows">
 
 
-              <div v-show="sort.tickets.name != 'hash' || (sort.tickets.name == 'hash' && sort.tickets.order == 'asc')" class="arrow-up"></div>
+              <div v-show="sort.tickets.name != 'hash' || (sort.tickets.name == 'hash' && sort.tickets.order == 'asc')"
+                   class="arrow-up"></div>
               <div v-show="sort.tickets.name != 'hash' || (sort.tickets.name == 'hash' && sort.tickets.order == 'desc')"
                    class="arrow-down"></div>
 
@@ -63,10 +66,12 @@
             <span class="tab-arrows">
 
 
-              <div v-show="sort.tickets.name != 'price' || (sort.tickets.name == 'price' && sort.tickets.order == 'asc')"
-                   class="arrow-up"></div>
-              <div v-show="sort.tickets.name != 'price' || (sort.tickets.name == 'price' && sort.tickets.order == 'desc')"
-                   class="arrow-down"></div>
+              <div
+                v-show="sort.tickets.name != 'price' || (sort.tickets.name == 'price' && sort.tickets.order == 'asc')"
+                class="arrow-up"></div>
+              <div
+                v-show="sort.tickets.name != 'price' || (sort.tickets.name == 'price' && sort.tickets.order == 'desc')"
+                class="arrow-down"></div>
 
              </span>
           </th>
@@ -76,7 +81,8 @@
             <span class="tab-arrows">
 
 
-              <div v-show="sort.tickets.name != 'when' || (sort.tickets.name == 'when' && sort.tickets.order == 'asc')" class="arrow-up"></div>
+              <div v-show="sort.tickets.name != 'when' || (sort.tickets.name == 'when' && sort.tickets.order == 'asc')"
+                   class="arrow-up"></div>
               <div v-show="sort.tickets.name != 'when' || (sort.tickets.name == 'when' && sort.tickets.order == 'desc')"
                    class="arrow-down"></div>
 
@@ -88,25 +94,24 @@
 
         <tr v-for="l in orderedTickets">
           <td><span>{{$lang.messages.game}} {{l.gameId | int}}</span></td>
-          <td><span>#{{l.args.periodNumber | int}}</span></td>
+          <td><span>#{{l.returnValues.periodNumber | int}}</span></td>
           <td>
             <div class="table-cube-padding">
 
-              <cube :hash="l.args.hash"></cube>
+              <cube :hash="l.returnValues.hash"></cube>
 
             </div>
           </td>
-          <td><span>{{l.args.hash | bytes}}</span></td>
+          <td><span>{{l.returnValues.hash | bytes}}</span></td>
 
           <td>
-            {{gamePrices[l.gameId]}} ETH
+            {{l.price}} ETH
           </td>
 
           <td>
-            {{l.args.when | sdate}}
-            {{l.args.when | stime}}
+            {{l.returnValues.when | sdate}}
+            {{l.returnValues.when | stime}}
           </td>
-
 
 
         </tr>
@@ -139,7 +144,8 @@
             <span class="tab-arrows">
 
 
-              <div v-show="sort.logs.name != 'hash' || (sort.logs.name == 'hash' && sort.logs.order == 'asc')" class="arrow-up"></div>
+              <div v-show="sort.logs.name != 'hash' || (sort.logs.name == 'hash' && sort.logs.order == 'asc')"
+                   class="arrow-up"></div>
               <div v-show="sort.logs.name != 'hash' || (sort.logs.name == 'hash' && sort.logs.order == 'desc')"
                    class="arrow-down"></div>
 
@@ -175,7 +181,8 @@
             <span class="tab-arrows">
 
 
-              <div v-show="sort.logs.name != 'when' || (sort.logs.name == 'when' && sort.logs.order == 'asc')" class="arrow-up"></div>
+              <div v-show="sort.logs.name != 'when' || (sort.logs.name == 'when' && sort.logs.order == 'asc')"
+                   class="arrow-up"></div>
               <div v-show="sort.logs.name != 'when' || (sort.logs.name == 'when' && sort.logs.order == 'desc')"
                    class="arrow-down"></div>
 
@@ -187,31 +194,31 @@
 
         <tr v-for="l in orderedLogs">
           <td><span>{{$lang.messages.game}} {{l.gameId | int}}</span></td>
-          <td><span>#{{l.args.periodNumber | int}}</span></td>
+          <td><span>#{{l.returnValues.periodNumber | int}}</span></td>
           <td>
             <div class="table-cube-padding">
 
-              <cube :hash="l.args.winnerHash"></cube>
+              <cube :hash="l.returnValues.winnerHash"></cube>
 
             </div>
           </td>
-          <td><span>{{l.args.winnerHash | bytes}}</span></td>
+          <td><span>{{l.returnValues.winnerHash | bytes}}</span></td>
 
           <td>
-            {{gamePrices[l.gameId]}} ETH
+            {{l.price}} ETH
           </td>
           <td>
-            {{l.args.reward | eth}}
+            {{l.returnValues.reward | eth}}
           </td>
           <td>
-            {{l.args.when | sdate}}
-            {{l.args.when | stime}}
+            {{l.returnValues.when | sdate}}
+            {{l.returnValues.when | stime}}
           </td>
 
           <!--<hr/>
-          <div v-if="t.tx && t.tx.args">
+          <div v-if="t.tx && t.tx.returnValues">
 
-            <div style="float: right">{{t.tx.args.when | sdate}} {{t.tx.args.when | stime}}</div>
+            <div style="float: right">{{t.tx.returnValues.when | sdate}} {{t.tx.returnValues.when | stime}}</div>
             <div style="font-size: 12px" class="card-text">        {{$lang.messages.owner}}:
               <a
               v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>
@@ -235,7 +242,7 @@
 </template>
 <script>
 
-  import address from '../ether'
+  import EtherData from '../ether'
   import Cube from 'components/Cube'
 
 
@@ -246,6 +253,7 @@
     components: {Cube},
     data: function () {
       return {
+        address: '',
         level: -1,
         logs: [],
         tickets: [],
@@ -259,8 +267,7 @@
             name: 'when',
             order: 'desc'
           }
-        },
-        gamePrices: [0.01, 0.03, 0.1, 0.5]
+        }
       }
     },
     created: function () {
@@ -287,10 +294,10 @@
       },
       setSort: function (name, tck) {
 
-          let prop = 'logs';
-          if (tck) {
-              prop = 'tickets';
-          }
+        let prop = 'logs';
+        if (tck) {
+          prop = 'tickets';
+        }
 
 
         if (this.sort[prop].name == name) {
@@ -310,62 +317,109 @@
         let self = this;
         self.level = MetamaskService.detectLevel();
 
-        function createWatcher(id) {
 
-          self.address = web3.eth.accounts[0];
-
-          MetamaskService.games().initWatcher(id).then(function (event) {
+        function createEventListener(id) {
 
 
-            event.PeriodFinished.get(function (error, logs) {
-              console.log('GAME', id);
+          MetamaskService.games().getEventLog(id, 'PeriodFinished').then(function (logs) {
 
-              for (var k = 0; k < logs.length; k++) {
-                let log = logs[k];
-                if (log.args.winnerAddr == self.address) {
-                  log.gameId = id;
-                  log.price = self.gamePrices[id];
-                  log.hash = log.args.winnerHash;
-                  log.when = log.args.when;
-                  log.reward = log.args.reward;
-                  self.$set(self.logs, self.logs.length, log);
-                }
+            console.log('LOGS', logs)
+
+            for (let k = 0; k < logs.length; k++) {
+              let log = logs[k];
+
+              if (log.returnValues.winnerAddr.toString().toLowerCase() == self.address.toString().toLowerCase()) {
+
+                log.gameId = id;
+                log.price = EtherData.contracts[id].price;
+                log.hash = log.returnValues.winnerHash;
+                log.when = log.returnValues.when;
+                log.reward = log.returnValues.reward;
+                self.$set(self.logs, self.logs.length, log);
               }
+            }
 
 
-              console.log('self.logs', self.logs)
-            });
+          })
 
+          MetamaskService.games().getEventLog(id, 'TicketSelling', {address: '0x5520148407Fe16c273E67A4C32173D08350103f3'}).then(function (logs) {
 
-            event.TicketSelling.get(function (error, logs) {
+            console.log('LOGS2', logs)
 
-              for (var i = 0; i < logs.length; i++) {
-                if (logs[i].args.from == web3.eth.accounts[0]) {
-                  let log = logs[i];
-                  log.gameId = id;
-                  log.price = self.gamePrices[id];
-                  log.hash = log.args.hash;
-                  log.when = log.args.when;
+            for (let k = 0; k < logs.length; k++) {
 
-                  self.$set(self.tickets, self.tickets.length, log);
+              let log = logs[k];
+              if (log.returnValues.from.toString().toLowerCase() == self.address.toString().toLowerCase()) {
 
+                log.gameId = id;
+                log.price = EtherData.contracts[id].price;
+                log.hash = log.returnValues.hash;
+                log.when = log.returnValues.when;
 
-                }
-
+                self.$set(self.tickets, self.tickets.length, log);
               }
-
-              console.log('self.tickets',self.tickets)
-
+            }
 
 
-            });
-          });
+          })
+
+
+          /*MetamaskService.games().initWatcher(id).then(function (event) {
+
+
+           event.PeriodFinished.get(function (error, logs) {
+           console.log('GAME', id);
+
+           for (var k = 0; k < logs.length; k++) {
+           let log = logs[k];
+           if (log.returnValues.winnerAddr == self.address) {
+           log.gameId = id;
+           log.price = self.gamePrices[id];
+           log.hash = log.returnValues.winnerHash;
+           log.when = log.returnValues.when;
+           log.reward = log.returnValues.reward;
+           self.$set(self.logs, self.logs.length, log);
+           }
+           }
+
+
+           console.log('self.logs', self.logs)
+           });
+
+
+           event.TicketSelling.get(function (error, logs) {
+
+           for (var i = 0; i < logs.length; i++) {
+           if (logs[i].returnValues.from == web3.eth.accounts[0]) {
+           let log = logs[i];
+           log.gameId = id;
+           log.price = self.gamePrices[id];
+           log.hash = log.returnValues.hash;
+           log.when = log.returnValues.when;
+
+           self.$set(self.tickets, self.tickets.length, log);
+
+
+           }
+
+           }
+
+           console.log('self.tickets', self.tickets)
+
+
+           });
+           });*/
         }
 
-
-        for (let id = 1; id < 5; id++) {
-          createWatcher(id);
-        }
+        web3.eth.getAccounts(function (error, accounts) {
+          if (accounts.length) {
+            self.address = accounts[0];
+            console.log('!self.address',self.address)
+            for (let k in EtherData.contracts) {
+              createEventListener(k);
+            }
+          }
+        });
 
 
       }
@@ -387,8 +441,6 @@
     height: 0;
     width: 50%;
   }
-
-
 
   .tabs {
     height: 57px;

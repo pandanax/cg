@@ -62,7 +62,11 @@ module.exports = {
   profile: 'profile',
   grules: 'rules and payouts',
   jackpot: 'Jackpot',
-  hashPhrase: 'Type your hash word'
+  hashPhrase: 'Type your hash word',
+
+  t1: 'You can buy a ticket by sending',
+  t2: 'to ethereum address',
+  t3: 'specify your unique hash phrase in transaction data, for example:'
 
 
 

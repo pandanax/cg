@@ -1,5 +1,5 @@
 import EtherData from "ether";
-import $ from "jquery"; // подключаем jQuery
+//import $ from "jquery"; // подключаем jQuery
 import Web3 from "web3";
 
 export default class Metamask {
@@ -75,19 +75,72 @@ export default class Metamask {
       getContractInstance (gameId) {
         return new Promise(function (resolve, reject) {
 
-          var web3 = new Web3('https://mainnet.infura.io/G6PuVMBuzi94Jru69sAz');
+          var web3 = new Web3('https://mainnet.infura.io/'+EtherData.infuraKey);
 
           var contract = new web3.eth.Contract(EtherData.contracts[gameId].abi, EtherData.contracts[gameId].address);
           resolve({contract});
         })
       },
 
-      initWatcher(gameId, pNum){
+      getEventLog(gameId, eventName, filter) {
         let self = this;
 
         return new Promise(function (resolve, reject) {
 
-          $.getJSON(EtherData.abiUrl(gameId), function (data) {
+
+          self.getContractInstance(gameId).then(function (lot) {
+
+            console.log('-lot',lot.contract.events);
+
+
+            lot.contract.getPastEvents(eventName, {
+              fromBlock: 0,
+              toBlock: 'latest'
+            }, function (e,r) {
+              if (e) {
+                reject(e);
+              } else {
+                resolve(r);
+              }
+            })
+
+          }).catch(function (e) {
+            reject(e);
+          });
+
+        })
+      },
+
+      initWatcher(gameId){
+        let self = this;
+
+        return new Promise(function (resolve, reject) {
+
+
+            self.getContractInstance(gameId).then(function (lot) {
+
+              console.log('lot',lot.contract);
+
+              resolve(
+                {
+                  TicketSelling: lot.contract.events.TicketSelling({}, {
+                    fromBlock: 0,
+                    toBlock: 'latest'
+                  }),
+                  PeriodFinished: lot.contract.events.PeriodFinished({}, {
+                    fromBlock: 0,
+                    toBlock: 'latest'
+                  })
+                }
+              );
+
+
+            }).catch(function (e) {
+              reject(e);
+            })
+
+
+          /*$.getJSON(EtherData.abiUrl(gameId), function (data) {
 
             var MyContract = web3.eth.contract(data.abi);
             var myContractInstance = MyContract.at(EtherData.address[gameId]);
@@ -108,7 +161,7 @@ export default class Metamask {
 
           }, function (e) {
             reject(e);
-          })
+          })*/
 
 
         })
@@ -166,7 +219,8 @@ export default class Metamask {
               }
             }
 
-            ret['address'] = lot.contract.address;
+            ret['address'] = lot.contract._address;
+
 
             for (let i = 0; i < fields.length; i++) {
 

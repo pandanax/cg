@@ -72,35 +72,35 @@
 
         <tr v-for="l in orderedLogs">
           <td><span>{{$lang.messages.game}} {{l.gameId | int}}</span></td>
-          <td><span>#{{l.args.periodNumber | int}}</span></td>
+          <td><span>#{{l.returnValues.periodNumber | int}}</span></td>
           <td>
             <div class="table-cube-padding">
 
-              <cube :hash="l.args.winnerHash"></cube>
+              <cube :hash="l.returnValues.winnerHash"></cube>
 
             </div>
           </td>
-          <td><span>{{l.args.winnerHash | bytes}}</span></td>
+          <td><span>{{l.returnValues.winnerHash | bytes}}</span></td>
           <td>
-            {{l.args.winnerAddr}}
+            {{l.returnValues.winnerAddr}}
             <!--<a
               v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>-->
           </td>
           <td>
-            {{gamePrices[l.gameId]}} ETH
+            {{l.price}} ETH
           </td>
           <td>
-            {{l.args.reward | eth}}
+            {{l.returnValues.reward | eth}}
           </td>
           <td>
-            {{l.args.when | sdate}}
-            {{l.args.when | stime}}
+            {{l.returnValues.when | sdate}}
+            {{l.returnValues.when | stime}}
           </td>
 
           <!--<hr/>
-          <div v-if="t.tx && t.tx.args">
+          <div v-if="t.tx && t.tx.returnValues">
 
-            <div style="float: right">{{t.tx.args.when | sdate}} {{t.tx.args.when | stime}}</div>
+            <div style="float: right">{{t.tx.returnValues.when | sdate}} {{t.tx.returnValues.when | stime}}</div>
             <div style="font-size: 12px" class="card-text">        {{$lang.messages.owner}}:
               <a
               v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>
@@ -124,11 +124,13 @@
 </template>
 <script>
 
-  import address from '../ether'
+  import EtherData from '../ether'
   import Cube from 'components/Cube'
-
-
   import Metamask from 'services/Metamask';
+
+
+
+
 
   const MetamaskService = new Metamask();
   export default {
@@ -140,8 +142,8 @@
         sort: {
           name: 'when',
           order: 'desc'
-        },
-        gamePrices: [0, 0.01, 0.03, 0.1, 0.5 ]
+        }
+
       }
     },
     created: function () {
@@ -175,39 +177,63 @@
 
 
         let self = this;
-        self.level = MetamaskService.detectLevel();
-
-        function createWatcher(id) {
 
 
-          MetamaskService.games().initWatcher(id).then(function (event) {
+        function createEventListener(id) {
+
+          MetamaskService.games().getEventLog(id, 'PeriodFinished').then(function (logs) {
+
+              console.log('LOGS', logs)
+
+            for (var k = 0; k < logs.length; k++) {
+              let log = logs[k];
+              log.gameId = id;
+              log.price = EtherData.contracts[id].price;
+              log.hash = log.returnValues.winnerHash;
+              log.when = log.returnValues.when;
+              log.reward = log.returnValues.reward;
+              self.$set(self.logs, self.logs.length, log);
+            }
 
 
+          })
 
-            event.PeriodFinished.get(function (error, logs) {
+          /*myContract.once('MyEvent', {
+            filter: {myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'}, // Using an array means OR: e.g. 20 or 23
+            fromBlock: 0
+          }, function(error, event){ console.log(event); });*/
+
+
+          /*MetamaskService.games().initWatcher(id).then(function (event) {
+
+
+              console.log('event.PeriodFinished',event.PeriodFinished);*/
+
+
+            /*event.PeriodFinished.get(function (error, logs) {
               console.log('GAME', id);
 
               for (var k = 0; k < logs.length; k++) {
                 let log = logs[k];
                 log.gameId = id;
                 log.price = self.gamePrices[id];
-                log.hash = log.args.winnerHash;
-                log.when = log.args.when;
-                log.reward = log.args.reward;
+                log.hash = log.returnValues.winnerHash;
+                log.when = log.returnValues.when;
+                log.reward = log.returnValues.reward;
                 self.$set(self.logs, self.logs.length, log);
               }
 
 
               console.log('self.logs', self.logs)
-            });
+            });*/
 
 
             /*event.TicketSelling.get(function (error, logs) {
 
              for (var i = 0; i < logs.length; i++) {
-             if (logs[i].args.from == web3.eth.accounts[0]) {
+             if (logs[i].returnValues.from == web3.eth.accounts[0]) {
 
-             var el = logs[i].args;
+             var el = logs[i].returnValues;
              el.tx = logs[i];
              self.$set(self.logs[id], i, el);
              console.log('-----------');
@@ -220,13 +246,22 @@
 
 
              });*/
-          });
+      /*    });
+        */
+
         }
 
 
-        for (let id = 1; id < 5; id++) {
+        /*for (let id = 1; id < 5; id++) {
           createWatcher(id);
+        }*/
+
+
+        for (let k in EtherData.contracts) {
+          createEventListener(k);
         }
+
+        console.log('EtherData',EtherData)
 
 
       }

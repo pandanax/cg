@@ -7,7 +7,7 @@
       </a>
 
       <div class="game-address bold">
-        <a v-bind:href="'https://rinkeby.etherscan.io/address/'+game.address" target="_blank">{{game.address}}</a>
+        <a v-bind:href="'https://etherscan.io/address/'+game.address" target="_blank">{{game.address}}</a>
       </div>
       <div class="game-description">
         <game-description v-bind:game-id="gameId" v-bind:game="game"></game-description>

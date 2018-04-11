@@ -6,7 +6,7 @@
     <b-modal id="modal" title="Transaction has been sent" hide-footer>
 
 
-      <a class="font-sm" v-bind:href="'https://rinkeby.etherscan.io/tx/'+buyHash"
+      <a class="font-sm" v-bind:href="'https://etherscan.io/tx/'+buyHash"
          target="_blank">
         {{buyHash}}
       </a>
@@ -34,7 +34,7 @@
               <div class="pull-left">
 
                 <div class="game-address bold">
-                  <a v-bind:href="'https://rinkeby.etherscan.io/address/'+game.address"
+                  <a v-bind:href="'https://etherscan.io/address/'+game.address"
                      target="_blank">{{game.address}}</a>
                 </div>
               </div>
@@ -81,13 +81,33 @@
             <div v-if="game.period && game.period.finished" class="text-finished cap ow bold font-yellow">
               {{$lang.messages.roundFinished}}
             </div>
-            <form v-else-if="game.period" class="input-form ">
-              <label class="ow cap font-blue">{{$lang.messages.hashPhrase}}:</label>
-              <input type="text" v-model="nonce"/>
-              <a v-on:click="buy" class="game-win-btn bg-yellow cap ow" href>
-                {{$lang.messages.toWin}}
-              </a>
-            </form>
+            <div v-else-if="game.period" class="input-form ">
+              <form v-if="showForm" class="input-form ">
+                <label class="ow cap font-blue">{{$lang.messages.hashPhrase}}:</label>
+                <input type="text" v-model="nonce"/>
+                <a v-on:click="buy" class="game-win-btn bg-yellow cap ow" href>
+                  {{$lang.messages.toWin}}
+                </a>
+              </form>
+
+                <form  class="input-form" v-if="showAlter">
+
+                  <label class="ow cap font-blue">{{$lang.messages.t1}} {{game.ticketPrice | eth}} {{$lang.messages.t2}}:</label>
+                  <input type="text" v-model="game.address" readonly/>
+
+
+
+                  <div class="help-ticket-text font-blue cap ow">
+                     {{$lang.messages.t3}} 0x01ABCDEF89
+                  </div>
+
+                  <!--<label class="ow cap font-blue">Для того чтобы получить полную функциональность в Galaxy Crypto Games, установите MetaMask. Вы сможете покупать билеты не покидая страницу, а также получите доступ к личному кабинету с историей покупок и выигрышей</label>-->
+
+
+                </form>
+
+
+            </div>
 
           </div>
         </div>
@@ -139,7 +159,9 @@
           period: {}
         },
         nonce: '',
-        buyHash: ''
+        buyHash: '',
+        showForm: false,
+        showAlter: false
 
       }
     },
@@ -189,6 +211,19 @@
         if (this.interval) clearTimeout(this.interval);
 
         self.updateView();
+
+        MetamaskService.detectLevel().then(function (level) {
+          if (level == 3) {
+              self.showForm = true;
+          } else {
+              self.showAlter = true;
+              console.log('1')
+          }
+        }).catch(function (e) {
+          self.showAlter = true;
+          console.log('2')
+
+        })
 
         if (this.$route.query.round) {
           self.currentPeriod = this.$route.query.round;
@@ -395,5 +430,9 @@
   text-align: center;
   font-size: 40px;
 }
+  .help-ticket-text {
+    padding: 10px 0 20px ;
+    font-size: 14px;
+  }
 
 </style>
