@@ -1,29 +1,45 @@
 import EtherData from "ether";
 import $ from "jquery"; // подключаем jQuery
+import Web3 from "web3";
 
 export default class Metamask {
 
   detectLevel() {
 
-    console.log('check metamask', typeof web3);
+    return new Promise(function (resolve, reject) {
 
-    let level = 0; //without all
-    if (typeof web3 !== 'undefined') {
-      level = 1; //with metamask
+      if (typeof web3 !== 'undefined') {
 
-      if (web3.version.network == 4) {
+        web3.version.getNetwork(function (error, networkId) {
+          if (!error && networkId == 1) {
 
-        level = 2;
-        if (web3.eth.accounts[0]) {
-          level = 3; //with account
-        }
+            web3.eth.getAccounts(function (error, accounts) {
+              if (!error && accounts.length) {
+                resolve(3)
+              } else {
+                if (error) {
+                  reject(error)
+                } else {
+                  resolve(2);
+                }
+              }
+            })
+
+          } else {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(1);
+            }
+          }
+        })
+
+      } else {
+        resolve(0);
       }
 
 
-    }
-
-
-    return level
+    })
 
   }
 
@@ -59,15 +75,10 @@ export default class Metamask {
       getContractInstance (gameId) {
         return new Promise(function (resolve, reject) {
 
-          $.getJSON(EtherData.abiUrl(gameId), function (data) {
+          var web3 = new Web3('https://mainnet.infura.io/G6PuVMBuzi94Jru69sAz');
 
-            var MyContract = web3.eth.contract(data.abi);
-            var lot = MyContract.at(EtherData.address[gameId]);
-
-            resolve({contract: lot, data: data});
-          }, function (e) {
-            reject(e);
-          })
+          var contract = new web3.eth.Contract(EtherData.contracts[gameId].abi, EtherData.contracts[gameId].address);
+          resolve({contract});
         })
       },
 
@@ -83,8 +94,14 @@ export default class Metamask {
 
             resolve(
               {
-                TicketSelling: myContractInstance.TicketSelling({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'}),
-                PeriodFinished: myContractInstance.PeriodFinished({periodNumber: pNum}, {fromBlock: 0, toBlock: 'latest'})
+                TicketSelling: myContractInstance.TicketSelling({periodNumber: pNum}, {
+                  fromBlock: 0,
+                  toBlock: 'latest'
+                }),
+                PeriodFinished: myContractInstance.PeriodFinished({periodNumber: pNum}, {
+                  fromBlock: 0,
+                  toBlock: 'latest'
+                })
               }
             );
 
@@ -106,7 +123,9 @@ export default class Metamask {
           let promise = self.getContractInstance(gameId)
           promise.then(function (lot) {
 
-            lot.contract.buyTicket(pNum, nonce, {
+            resolve('URA')
+
+            /*lot.contract.buyTicket(pNum, nonce, {
               from: web3.eth.accounts[0],
               value: price
             }, function (e, r) {
@@ -114,7 +133,7 @@ export default class Metamask {
                 reject(e);
               }
               resolve(r);
-            });
+            });*/
 
           }).catch(function (e) {
             reject(e);
@@ -137,25 +156,29 @@ export default class Metamask {
             let filled = 0;
             let ret = {};
 
-            for (let i = 0; i < lot.data.abi.length; i++) {
-              if (lot.data.abi[i].constant && lot.data.abi[i].outputs.length == 1) {
-                fields.push({name: lot.data.abi[i].name, type: lot.data.abi[i].outputs[0].type});
+            for (let i = 0; i < EtherData.contracts[gameId].abi.length; i++) {
+              if (EtherData.contracts[gameId].abi[i].constant && EtherData.contracts[gameId].abi[i].outputs.length == 1) {
+                fields.push({
+                  name: EtherData.contracts[gameId].abi[i].name,
+                  type: EtherData.contracts[gameId].abi[i].outputs[0].type
+                });
               }
             }
 
             ret['address'] = lot.contract.address;
 
             for (let i = 0; i < fields.length; i++) {
-              lot.contract[fields[i].name](function (e, r) {
-                if (e) {
-                  reject(e);
-                }
+
+
+              lot.contract.methods[fields[i].name]().call().then(function (r) {
                 ret[fields[i].name] = r;
                 filled++;
                 if (filled == fields.length) {
                   resolve(ret);
                 }
-              })
+              }).catch(function (e) {
+                reject(e);
+              });
             }
 
           }).catch(function (e) {
@@ -180,19 +203,16 @@ export default class Metamask {
 
           self.getContractInstance(gameId).then(function (lot) {
 
-            lot.contract.periods(pNum, function (e, r) {
+            lot.contract.methods.periods(pNum).call().then(function (r) {
 
-              if (e) {
-                reject(e);
-              }
 
               let filled = 0;
               let ret = {};
               let fields = [];
 
-              for (let i = 0; i < lot.data.abi.length; i++) {
-                if (lot.data.abi[i].name == 'periods') {
-                  fields = lot.data.abi[i].outputs;
+              for (let i = 0; i < EtherData.contracts[gameId].abi.length; i++) {
+                if (EtherData.contracts[gameId].abi[i].name == 'periods') {
+                  fields = EtherData.contracts[gameId].abi[i].outputs;
                 }
               }
 
@@ -209,15 +229,18 @@ export default class Metamask {
               }
 
 
+            }).catch(function (e) {
+              reject(e);
             })
+
+
           }).catch(function (e) {
             reject(e);
           })
 
         });
 
-      }
-      ,
+      },
 
 
       getTicketFields(gameId, pNum, ticketAmount)
@@ -321,74 +344,7 @@ export default class Metamask {
 }
 
 
-/*
- *
- setField: function (key, methods) {
- var self = this;
- methods[key]().call().then(function (r) {
- self[key] = r;
- if (key == 'currentPeriod') {
- self.setPeriodInfo(r, methods);
- }
- });
- },
 
- setPeriodTicketInfo: function (periodNumber, ticketNumber, methods) {
- var self = this;
- methods.tickets(periodNumber, ticketNumber).call().then(function (ticketData) {
- self.$set(self.tickets, ticketData[0], {number: ticketData[0], address: ticketData[1], hash: ticketData[2]});
- });
- },
+//infura
 
- setPeriodInfo: function (periodNumber, methods) {
- var self = this;
- methods.periods(periodNumber).call().then(function (periodData) {
- for (var i = 0; i < self.periodFields.length; i++) {
- self.$set(self.period, self.periodFields[i], periodData[i]);
- if (self.periodFields[i] == 'ticketAmount' && periodData[i] > 0) {
- for (var j = 0; j < periodData[i]; j++) {
- self.setPeriodTicketInfo(periodNumber, j, methods);
- }
- }
- }
- });
- },
-
- initWatcher: function () {
-
- var self = this;
-
- let contract = new window.web3LocalHttp.eth.Contract(self.abi, addresses.lotery);
-
- contract.setProvider(window.web3LocalWebsocketProvider);
-
- contract.events.TicketSelling({
- fromBlock: 0,
- toBlock: 'latest'
- }, function (r,a,b) {
- console.log('RRR', r,a,b);
- })
-
-
- },
-
- initContract: function () {
- var self = this;
- self.$store.commit('INCREMENT');
- $.getJSON(addresses.loteryAbi, function (data) {
- self.abi = data.abi;
- let contract = new window.web3LocalHttp.eth.Contract(self.abi, addresses.lotery);
- for (var i = 0; i < self.fields.length; i++) {
- var key = self.fields[i];
- self.setField(key, contract.methods);
- }
-
- self.initWatcher();
-
- self.$store.commit('DECREMENT');
- }, function (e) {
- alert(e);
- self.$store.commit('DECREMENT');
- });
- },
- * */
+//https://mainnet.infura.io/G6PuVMBuzi94Jru69sAz

@@ -13,20 +13,22 @@ module.exports = function (deployer) {
 
 
         var _duration = 60 * 60; //1 hour in sec
-        var _ticketPrice = 0.01 * Math.pow(10, 18);
+        var _ticketPrice = 0.003 * Math.pow(10, 18);
         var _benefitPercents = 5;
-        var _maxTicketAmount = 100;
+        var _jackpotPercents = 15;
+        var _maxTicketAmount = 3;
 
-        return deployer.deploy(Lotery, _duration, _ticketPrice, _benefitPercents, _maxTicketAmount, Hash.address).then(function () {
+        return deployer.deploy(Lotery, _duration, _ticketPrice, _benefitPercents, _maxTicketAmount, Hash.address, _jackpotPercents).then(function () {
 
 
 
             var _duration = 3 * 60 * 60; //3 hour in sec
-            var _ticketPrice = 0.03 * Math.pow(10, 18);
+            var _ticketPrice = 0.01 * Math.pow(10, 18);
             var _benefitPercents = 5;
-            var _maxTicketAmount = 33;
+            var _jackpotPercents = 15;
+            var _maxTicketAmount = 7;
 
-            return deployer.deploy(Lotery, _duration, _ticketPrice, _benefitPercents, _maxTicketAmount, Hash.address).then(function () {
+            return deployer.deploy(Lotery, _duration, _ticketPrice, _benefitPercents, _maxTicketAmount, Hash.address, _jackpotPercents).then(function () {
 
 
 
@@ -51,7 +53,6 @@ module.exports = function (deployer) {
                 });
 
             });
-
 
         });
 

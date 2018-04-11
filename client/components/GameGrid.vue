@@ -6,18 +6,18 @@
         <div class="col-sm">
           <game-preview game-id="1"></game-preview>
         </div>
-        <div class="col-sm">
+        <!--<div class="col-sm">
           <game-preview game-id="2"></game-preview>
-        </div>
+        </div>-->
       </div>
-      <div class="row martop-game-row">
+      <!--<div class="row martop-game-row">
         <div class="col-sm">
           <game-preview game-id="3"></game-preview>
         </div>
         <div class="col-sm">
           <game-preview game-id="4"></game-preview>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 

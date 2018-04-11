@@ -16,7 +16,8 @@
             </div>
           </div>
         </div>
-        <div v-bind:class="{'gradient-green':level == 3, 'gradient-red':level == 0, 'gradient-yellow':level == 1 || level == 2}"></div>
+        <div
+          v-bind:class="{'gradient-green':level == 3, 'gradient-red':level == 0, 'gradient-yellow':level == 1 || level == 2}"></div>
 
       </div>
     </div>
@@ -35,11 +36,13 @@
     background: linear-gradient(to right, #00a308, #fff);
     padding: 0 0 10px;
   }
+
   .gradient-red {
     background: #00a308;
     background: linear-gradient(to right, #a80000, #fff);
     padding: 0 0 10px;
   }
+
   .gradient-yellow {
     background: #00a308;
     background: linear-gradient(to right, #ffa800, #fff);
@@ -51,6 +54,7 @@
     left: 0;
     position: absolute;
   }
+
   a.profile-link {
     color: white;
   }
@@ -79,12 +83,13 @@
     methods: {
       init: function () {
         let self = this;
-        setTimeout(function () {
-          self.level = MetamaskService.detectLevel();
-          self.addr = MetamaskService.getAddr();
-          console.log('lvl', self.level)
-        },100)
 
+        MetamaskService.detectLevel().then(function (level) {
+          self.level = level
+        }).catch(function (e) {
+
+          console.error(e);
+        });
       }
     }
   }
