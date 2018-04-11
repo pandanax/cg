@@ -43,13 +43,13 @@ export default class Metamask {
 
   }
 
-  getAddr() {
-    let acc = false;
-    if (web3 && web3.eth && web3.eth.accounts && web3.eth.accounts[0]) {
-      acc = web3.eth.accounts[0];
-    }
-    return acc;
-  }
+  /*getAddr() {
+   let acc = false;
+   if (web3 && web3.eth && web3.eth.accounts && web3.eth.accounts[0]) {
+   acc = web3.eth.accounts[0];
+   }
+   return acc;
+   }*/
 
   games() {
 
@@ -120,24 +120,25 @@ export default class Metamask {
 
         return new Promise(function (resolve, reject) {
 
-          let promise = self.getContractInstance(gameId)
-          promise.then(function (lot) {
 
-            resolve('URA')
+          var MyContract = web3.eth.contract(EtherData.contracts[gameId].abi);
+          var lot = MyContract.at(EtherData.contracts[gameId].address);
 
-            /*lot.contract.buyTicket(pNum, nonce, {
-              from: web3.eth.accounts[0],
-              value: price
-            }, function (e, r) {
-              if (e) {
-                reject(e);
-              }
-              resolve(r);
-            });*/
+          web3.eth.getAccounts(function (error, accounts) {
+            if (accounts.length) {
+              lot.buyTicket(pNum, nonce, {
+                from: accounts[0],
+                value: price
+              }, function (e, r) {
+                if (e) {
+                  reject(e);
+                }
+                resolve(r);
+              });
+            }
+          })
 
-          }).catch(function (e) {
-            reject(e);
-          });
+
         });
 
 
@@ -266,9 +267,9 @@ export default class Metamask {
               let fields = [];
 
 
-              for (let i = 0; i < lot.data.abi.length; i++) {
-                if (lot.data.abi[i].name == 'tickets') {
-                  fields = lot.data.abi[i].outputs;
+              for (let i = 0; i < EtherData.contracts[gameId].abi.length; i++) {
+                if (EtherData.contracts[gameId].abi[i].name == 'tickets') {
+                  fields = EtherData.contracts[gameId].abi[i].outputs;
                 }
               }
 
@@ -277,8 +278,7 @@ export default class Metamask {
 
                 for (var t = 0; t < ticketAmount; t++) {
 
-                  lot.contract.tickets(pNum, t, function (e, r) {
-
+                  lot.contract.methods.tickets(pNum, t).call().then(function (r) {
 
                     var el = {};
                     for (var i = 0; i < fields.length; i++) {
@@ -293,6 +293,8 @@ export default class Metamask {
                     }
 
 
+                  }).catch(function (e) {
+                    reject(e);
                   })
                 }
 
@@ -342,7 +344,6 @@ export default class Metamask {
   }
 
 }
-
 
 
 //infura

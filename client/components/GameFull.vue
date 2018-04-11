@@ -95,10 +95,10 @@
       <div class="ticket-container">
         <main-tickets :game="game" :game-id="gameId" :roundId="currentPeriod"></main-tickets>
       </div>
-      <div class="pagination">
+      <div v-if="game.currentPeriod > 0" class="pagination">
         <div v-bind:class="{'active':currentPeriod == index}" v-if="game" v-on:click="loadRound(index)" class="page" v-for="(n,index) in game.currentPeriod*1 + 1">
 
-          #{{index}}
+          {{index}}
         </div>
       </div>
     </div>

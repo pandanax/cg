@@ -5,9 +5,9 @@
       {{$lang.messages.m5}}
     </div>
 
-    <table class="cap table table-sm table-striped">
+    <table class="table table-sm table-striped">
       <thead v-if="orderedTickets.length">
-      <tr class="ow font-blue">
+      <tr class="ow font-blue cap ">
         <th class="cursor-pointer" v-on:click="setSort('number')">
         <span>
         <span>#</span>
