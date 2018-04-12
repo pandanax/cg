@@ -38,7 +38,7 @@
         <div class="row">
         <div class="col-4 offset-4">
 
-          <a href="#/profile" class="btn btn-lg btn-block btn-primary">Играть</a>
+          <a href="/profile" class="btn btn-lg btn-block btn-primary">Играть</a>
         </div>
         </div>
       </div>

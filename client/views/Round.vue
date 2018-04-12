@@ -39,10 +39,10 @@
 
 
           </div>
-          <!--<a v-bind:href="'#/game/'+gameId + '/0'">
+          <!--<a v-bind:href="'/game/'+gameId + '/0'">
             #0
           </a>
-          <a v-if="game.currentPeriod" v-bind:href="'#/game/'+gameId + '/'+ game.currentPeriod"
+          <a v-if="game.currentPeriod" v-bind:href="'/game/'+gameId + '/'+ game.currentPeriod"
              v-for="n in game.currentPeriod.c">
             #{{ n }}
           </a>-->

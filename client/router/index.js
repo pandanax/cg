@@ -12,8 +12,8 @@ import Faq from '../views/Faq'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'hash',
-  //mode: 'history',
+  //mode: 'hash',
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -50,3 +50,31 @@ export default new Router({
     }
   ]
 })
+
+/*
+ /etc/nginx/sites-available# nano pandanax.info
+
+server {
+ listen       80;
+ server_name  localhost;
+
+ location / {
+ root   /var/www/html;
+ index  index.html index.htm;
+
+ try_files $uri $uri/ @rewrites;
+ }
+
+ location @rewrites {
+ rewrite ^(.+)$ /index.html last;
+ }
+
+ # location ~* \.(?:ico|css|js|gif|jpe?g|png)$ {
+ #    # Some basic cache-control for static files to be sent to the browser
+ #    expires max;
+ #    add_header Pragma public;
+ #    add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+ # }
+
+ }
+ */

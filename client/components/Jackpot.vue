@@ -1,5 +1,5 @@
 <template>
-  <div class="jackpot cap ow">
+  <div v-show="jack > 0" class="jackpot cap ow">
 
     <div class="container">
       <div class="jackpot-str font-white">

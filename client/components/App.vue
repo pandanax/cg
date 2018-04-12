@@ -1,9 +1,9 @@
 <template>
   <div class="body" id="app">
     <!--<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-      <h5 class="my-0 mr-md-auto font-weight-normal"><a href="#/">CryptoGames</a></h5>
+      <h5 class="my-0 mr-md-auto font-weight-normal"><a href="/">CryptoGames</a></h5>
       <navigation></navigation>
-      <a class="btn btn-outline-primary" href="#/profile">Profile</a>
+      <a class="btn btn-outline-primary" href="/profile">Profile</a>
     </div>-->
     <metamask-status></metamask-status>
     <router-view></router-view>
@@ -81,6 +81,7 @@
   .table th {
     font-size: 18px;
     font-weight: normal;
+    user-select: none;
   }
   .table td {
     font-size: 14px;
@@ -155,6 +156,12 @@
 
   .page-header {
     font-size: 36px;
+  }
+
+  .page-loading {
+    text-align: center;
+    padding: 60px 0 60px;
+    background: #fff;
   }
 
 

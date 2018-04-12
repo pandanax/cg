@@ -7,7 +7,7 @@
 
         <div class="profile-header ow">
           <span class="ow cap">
-{{$lang.messages.player }}
+          {{$lang.messages.player }}
           </span>
           <span> {{address | addr}}</span>
         </div>
@@ -26,13 +26,20 @@
     </div>
 
     <div class="container">
-      <table v-if="tab == 0" class=" table table-sm table-striped ">
-        <thead class="cap">
-        <tr class="ow font-blue">
+      <div v-if="tab == 0">
+        <div class="page-loading" v-if="gameCount*2 > loadedCount">
+          <img src="/static/loader.gif"/>
+        </div>
+        <div class="ow cap font-blue" v-if="gameCount*2 == loadedCount && !orderedTickets.length">
+          {{$lang.messages.n2}}
+        </div>
+        <table v-if="gameCount*2 == loadedCount && orderedTickets.length" class=" table table-sm table-striped ">
+          <thead class="cap">
+          <tr class="ow font-blue">
 
-          <th class="cursor-pointer" v-on:click="setSort('gameId', 'tickets')">
-            {{$lang.messages.game}}
-            <span class="tab-arrows">
+            <th class="cursor-pointer" v-on:click="setSort('gameId', 'tickets')">
+              {{$lang.messages.game}}
+              <span class="tab-arrows">
 
 
               <div
@@ -43,14 +50,14 @@
                 class="arrow-down"></div>
 
              </span>
-          </th>
-          <th class="cursor-pointer">
-            {{$lang.messages.round}}
-          </th>
-          <th></th>
-          <th class="cursor-pointer" v-on:click="setSort('hash', 'tickets')">
-            {{$lang.messages.hash}}
-            <span class="tab-arrows">
+            </th>
+            <th class="cursor-pointer">
+              {{$lang.messages.round}}
+            </th>
+            <th></th>
+            <th class="cursor-pointer" v-on:click="setSort('hash', 'tickets')">
+              {{$lang.messages.hash}}
+              <span class="tab-arrows">
 
 
               <div v-show="sort.tickets.name != 'hash' || (sort.tickets.name == 'hash' && sort.tickets.order == 'asc')"
@@ -59,11 +66,11 @@
                    class="arrow-down"></div>
 
              </span>
-          </th>
+            </th>
 
-          <th class="cursor-pointer" v-on:click="setSort('price', 'tickets')">
-            {{$lang.messages.ticketPrice}}
-            <span class="tab-arrows">
+            <th class="cursor-pointer" v-on:click="setSort('price', 'tickets')">
+              {{$lang.messages.ticketPrice}}
+              <span class="tab-arrows">
 
 
               <div
@@ -74,11 +81,11 @@
                 class="arrow-down"></div>
 
              </span>
-          </th>
+            </th>
 
-          <th class="cursor-pointer" v-on:click="setSort('when', 'tickets')">
-            {{$lang.messages.date}}
-            <span class="tab-arrows">
+            <th class="cursor-pointer" v-on:click="setSort('when', 'tickets')">
+              {{$lang.messages.date}}
+              <span class="tab-arrows">
 
 
               <div v-show="sort.tickets.name != 'when' || (sort.tickets.name == 'when' && sort.tickets.order == 'asc')"
@@ -87,45 +94,53 @@
                    class="arrow-down"></div>
 
              </span>
-          </th>
-        </tr>
-        </thead>
-        <tbody>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
 
-        <tr v-for="l in orderedTickets">
-          <td><span>{{$lang.messages.game}} {{l.gameId | int}}</span></td>
-          <td><span>#{{l.returnValues.periodNumber | int}}</span></td>
-          <td>
-            <div class="table-cube-padding">
+          <tr v-for="l in orderedTickets">
+            <td><span>{{$lang.messages.game}} {{l.gameId | int}}</span></td>
+            <td><span>#{{l.returnValues.periodNumber | int}}</span></td>
+            <td>
+              <div class="table-cube-padding">
 
-              <cube :hash="l.returnValues.hash"></cube>
+                <cube :hash="l.returnValues.hash"></cube>
 
-            </div>
-          </td>
-          <td><span>{{l.returnValues.hash | bytes}}</span></td>
+              </div>
+            </td>
+            <td><span>{{l.returnValues.hash | bytes}}</span></td>
 
-          <td>
-            {{l.price}} ETH
-          </td>
+            <td>
+              {{l.price}} ETH
+            </td>
 
-          <td>
-            {{l.returnValues.when | sdate}}
-            {{l.returnValues.when | stime}}
-          </td>
+            <td>
+              {{l.returnValues.when | sdate}}
+              {{l.returnValues.when | stime}}
+            </td>
 
 
-        </tr>
+          </tr>
 
-        </tbody>
+          </tbody>
 
-      </table>
-      <table v-if="tab == 1" class=" table table-sm table-striped ">
-        <thead class="cap">
-        <tr class="ow font-blue">
+        </table>
+      </div>
+      <div v-if="tab == 1">
+        <div class="page-loading" v-if="gameCount*2 > loadedCount">
+          <img src="/static/loader.gif"/>
+        </div>
+        <div class="ow cap font-blue" v-if="gameCount*2 == loadedCount && !orderedLogs.length">
+          {{$lang.messages.n1}}
+        </div>
+        <table v-if="gameCount*2 == loadedCount && orderedLogs.length" class=" table table-sm table-striped ">
+          <thead class="cap">
+          <tr class="ow font-blue">
 
-          <th class="cursor-pointer" v-on:click="setSort('gameId')">
-            {{$lang.messages.game}}
-            <span class="tab-arrows">
+            <th class="cursor-pointer" v-on:click="setSort('gameId')">
+              {{$lang.messages.game}}
+              <span class="tab-arrows">
 
 
               <div v-show="sort.logs.name != 'gameId' || (sort.logs.name == 'gameId' && sort.logs.order == 'asc')"
@@ -134,14 +149,14 @@
                    class="arrow-down"></div>
 
              </span>
-          </th>
-          <th class="cursor-pointer">
-            {{$lang.messages.round}}
-          </th>
-          <th></th>
-          <th class="cursor-pointer" v-on:click="setSort('hash')">
-            {{$lang.messages.hash}}
-            <span class="tab-arrows">
+            </th>
+            <th class="cursor-pointer">
+              {{$lang.messages.round}}
+            </th>
+            <th></th>
+            <th class="cursor-pointer" v-on:click="setSort('hash')">
+              {{$lang.messages.hash}}
+              <span class="tab-arrows">
 
 
               <div v-show="sort.logs.name != 'hash' || (sort.logs.name == 'hash' && sort.logs.order == 'asc')"
@@ -150,11 +165,11 @@
                    class="arrow-down"></div>
 
              </span>
-          </th>
+            </th>
 
-          <th class="cursor-pointer" v-on:click="setSort('price')">
-            {{$lang.messages.ticketPrice}}
-            <span class="tab-arrows">
+            <th class="cursor-pointer" v-on:click="setSort('price')">
+              {{$lang.messages.ticketPrice}}
+              <span class="tab-arrows">
 
 
               <div v-show="sort.logs.name != 'price' || (sort.logs.name == 'price' && sort.logs.order == 'asc')"
@@ -163,10 +178,10 @@
                    class="arrow-down"></div>
 
              </span>
-          </th>
-          <th class="cursor-pointer" v-on:click="setSort('reward')">
-            {{$lang.messages.gain}}
-            <span class="tab-arrows">
+            </th>
+            <th class="cursor-pointer" v-on:click="setSort('reward')">
+              {{$lang.messages.gain}}
+              <span class="tab-arrows">
 
 
               <div v-show="sort.logs.name != 'reward' || (sort.logs.name == 'reward' && sort.logs.order == 'asc')"
@@ -175,10 +190,10 @@
                    class="arrow-down"></div>
 
              </span>
-          </th>
-          <th class="cursor-pointer" v-on:click="setSort('when')">
-            {{$lang.messages.date}}
-            <span class="tab-arrows">
+            </th>
+            <th class="cursor-pointer" v-on:click="setSort('when')">
+              {{$lang.messages.date}}
+              <span class="tab-arrows">
 
 
               <div v-show="sort.logs.name != 'when' || (sort.logs.name == 'when' && sort.logs.order == 'asc')"
@@ -187,55 +202,56 @@
                    class="arrow-down"></div>
 
              </span>
-          </th>
-        </tr>
-        </thead>
-        <tbody>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
 
-        <tr v-for="l in orderedLogs">
-          <td><span>{{$lang.messages.game}} {{l.gameId | int}}</span></td>
-          <td><span>#{{l.returnValues.periodNumber | int}}</span></td>
-          <td>
-            <div class="table-cube-padding">
+          <tr v-for="l in orderedLogs">
+            <td><span>{{$lang.messages.game}} {{l.gameId | int}}</span></td>
+            <td><span>#{{l.returnValues.periodNumber | int}}</span></td>
+            <td>
+              <div class="table-cube-padding">
 
-              <cube :hash="l.returnValues.winnerHash"></cube>
+                <cube :hash="l.returnValues.winnerHash"></cube>
 
-            </div>
-          </td>
-          <td><span>{{l.returnValues.winnerHash | bytes}}</span></td>
+              </div>
+            </td>
+            <td><span>{{l.returnValues.winnerHash | bytes}}</span></td>
 
-          <td>
-            {{l.price}} ETH
-          </td>
-          <td>
-            {{l.returnValues.reward | eth}}
-          </td>
-          <td>
-            {{l.returnValues.when | sdate}}
-            {{l.returnValues.when | stime}}
-          </td>
+            <td>
+              {{l.price}} ETH
+            </td>
+            <td>
+              {{l.returnValues.reward | eth}}
+            </td>
+            <td>
+              {{l.returnValues.when | sdate}}
+              {{l.returnValues.when | stime}}
+            </td>
 
-          <!--<hr/>
-          <div v-if="t.tx && t.tx.returnValues">
+            <!--<hr/>
+            <div v-if="t.tx && t.tx.returnValues">
 
-            <div style="float: right">{{t.tx.returnValues.when | sdate}} {{t.tx.returnValues.when | stime}}</div>
-            <div style="font-size: 12px" class="card-text">        {{$lang.messages.owner}}:
-              <a
-              v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>
-              <br/>
+              <div style="float: right">{{t.tx.returnValues.when | sdate}} {{t.tx.returnValues.when | stime}}</div>
+              <div style="font-size: 12px" class="card-text">        {{$lang.messages.owner}}:
+                <a
+                v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>
+                <br/>
 
-              {{$lang.messages.transaction}}:
-              <a v-bind:href="'https://rinkeby.etherscan.io/tx/'+t.tx.transactionHash"
-                             target="_blank">{{t.tx.transactionHash}}</a>
-            </div>
+                {{$lang.messages.transaction}}:
+                <a v-bind:href="'https://rinkeby.etherscan.io/tx/'+t.tx.transactionHash"
+                               target="_blank">{{t.tx.transactionHash}}</a>
+              </div>
 
-          </div>-->
+            </div>-->
 
-        </tr>
+          </tr>
 
-        </tbody>
+          </tbody>
 
-      </table>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -267,7 +283,9 @@
             name: 'when',
             order: 'desc'
           }
-        }
+        },
+        gameCount: 0,
+        loadedCount: 0
       }
     },
     created: function () {
@@ -323,8 +341,6 @@
 
           MetamaskService.games().getEventLog(id, 'PeriodFinished').then(function (logs) {
 
-            console.log('LOGS', logs)
-
             for (let k = 0; k < logs.length; k++) {
               let log = logs[k];
 
@@ -339,12 +355,12 @@
               }
             }
 
+            self.loadedCount++;
 
           })
 
           MetamaskService.games().getEventLog(id, 'TicketSelling', {address: '0x5520148407Fe16c273E67A4C32173D08350103f3'}).then(function (logs) {
 
-            console.log('LOGS2', logs)
 
             for (let k = 0; k < logs.length; k++) {
 
@@ -360,63 +376,21 @@
               }
             }
 
+            self.loadedCount++;
+
 
           })
 
 
-          /*MetamaskService.games().initWatcher(id).then(function (event) {
-
-
-           event.PeriodFinished.get(function (error, logs) {
-           console.log('GAME', id);
-
-           for (var k = 0; k < logs.length; k++) {
-           let log = logs[k];
-           if (log.returnValues.winnerAddr == self.address) {
-           log.gameId = id;
-           log.price = self.gamePrices[id];
-           log.hash = log.returnValues.winnerHash;
-           log.when = log.returnValues.when;
-           log.reward = log.returnValues.reward;
-           self.$set(self.logs, self.logs.length, log);
-           }
-           }
-
-
-           console.log('self.logs', self.logs)
-           });
-
-
-           event.TicketSelling.get(function (error, logs) {
-
-           for (var i = 0; i < logs.length; i++) {
-           if (logs[i].returnValues.from == web3.eth.accounts[0]) {
-           let log = logs[i];
-           log.gameId = id;
-           log.price = self.gamePrices[id];
-           log.hash = log.returnValues.hash;
-           log.when = log.returnValues.when;
-
-           self.$set(self.tickets, self.tickets.length, log);
-
-
-           }
-
-           }
-
-           console.log('self.tickets', self.tickets)
-
-
-           });
-           });*/
         }
 
         web3.eth.getAccounts(function (error, accounts) {
           if (accounts.length) {
             self.address = accounts[0];
-            console.log('!self.address',self.address)
+            console.log('!self.address', self.address)
             for (let k in EtherData.contracts) {
               createEventListener(k);
+              self.gameCount++;
             }
           }
         });

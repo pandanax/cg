@@ -16,6 +16,13 @@
       </small>
     </b-modal>
 
+    <div v-if="!game.$loaded">
+
+      <div class="page-loading">
+        <img src="/static/loader.gif"/>
+      </div>
+
+    </div>
     <div class="game-container" v-if="game.$loaded">
       <div class="row">
         <div class="col-lg-6">
@@ -27,9 +34,9 @@
 
               <div class="pull-left">
 
-            <span v-bind:href="'#/game/' + gameId" class="game-header cap ow">
-              {{$lang.messages.game}} {{gameId}}#{{currentPeriod}}
-            </span>
+              <span v-bind:href="'/game/' + gameId" class="game-header cap ow">
+                {{$lang.messages.game}} {{gameId}}#{{currentPeriod}}
+              </span>
               </div>
               <div class="pull-left">
 
@@ -56,7 +63,6 @@
           <div class="game-bg">
 
             <div class="first-str">
-
               <div class="ticket-price cap ow bold font-yellow">
                 {{$lang.messages.ticketPrice}}
               </div>
@@ -64,13 +70,16 @@
                 {{game.ticketPrice | eth}}
               </div>
             </div>
-            <div class="sec-str">
 
+            <div class="sec-str">
               <div class="current-round cap ow bold font-white">
                 {{$lang.messages.round}} #{{currentPeriod}}
               </div>
               <div class="tickets-left cap ow bold font-white">
                 {{$lang.messages.stock}}: {{game.maxTicketAmount - game.period.ticketAmount | int}}
+              </div>
+              <div class="jackpotstr cap ow bold font-white">
+                {{$lang.messages.jackpot}}: {{game.jackPotFunds | eth}}
               </div>
             </div>
 
@@ -90,21 +99,21 @@
                 </a>
               </form>
 
-                <form  class="input-form" v-if="showAlter">
+              <form class="input-form" v-if="showAlter">
 
-                  <label class="ow cap font-blue">{{$lang.messages.t1}} {{game.ticketPrice | eth}} {{$lang.messages.t2}}:</label>
-                  <input type="text" v-model="game.address" readonly/>
-
-
-
-                  <div class="help-ticket-text font-blue cap ow">
-                     {{$lang.messages.t3}} 0x01ABCDEF89
-                  </div>
-
-                  <!--<label class="ow cap font-blue">Для того чтобы получить полную функциональность в Galaxy Crypto Games, установите MetaMask. Вы сможете покупать билеты не покидая страницу, а также получите доступ к личному кабинету с историей покупок и выигрышей</label>-->
+                <label
+                  class="ow cap font-blue">{{$lang.messages.t1}} {{game.ticketPrice | eth}} {{$lang.messages.t2}}:</label>
+                <input type="text" v-model="game.address" readonly/>
 
 
-                </form>
+                <div class="help-ticket-text font-blue cap ow">
+                  {{$lang.messages.t3}} 0x01ABCDEF89
+                </div>
+
+                <!--<label class="ow cap font-blue">Для того чтобы получить полную функциональность в Galaxy Crypto Games, установите MetaMask. Вы сможете покупать билеты не покидая страницу, а также получите доступ к личному кабинету с историей покупок и выигрышей</label>-->
+
+
+              </form>
 
 
             </div>
@@ -116,7 +125,8 @@
         <main-tickets :game="game" :game-id="gameId" :roundId="currentPeriod"></main-tickets>
       </div>
       <div v-if="game.currentPeriod > 0" class="pagination">
-        <div v-bind:class="{'active':currentPeriod == index}" v-if="game" v-on:click="loadRound(index)" class="page" v-for="(n,index) in game.currentPeriod*1 + 1">
+        <div v-bind:class="{'active':currentPeriod == index}" v-if="game" v-on:click="loadRound(index)" class="page"
+             v-for="(n,index) in game.currentPeriod*1 + 1">
 
           {{index}}
         </div>
@@ -173,6 +183,9 @@
 
         //e.preventDefault();
         self.$router.push({path: '/game/' + self.gameId, query: {round: round.toString()}});
+
+        self.$set(self, 'game', {period: {}});
+
         self.init();
 
       },
@@ -214,20 +227,22 @@
 
         MetamaskService.detectLevel().then(function (level) {
           if (level == 3) {
-              self.showForm = true;
+            self.showForm = true;
           } else {
-              self.showAlter = true;
-              console.log('1')
+            self.showAlter = true;
           }
         }).catch(function (e) {
           self.showAlter = true;
-          console.log('2')
-
         })
 
         if (this.$route.query.round) {
           self.currentPeriod = this.$route.query.round;
         }
+
+        /*self.$set(self, 'game', {});*/
+        /*self.$set(self.game, 'tickets', []);
+
+         self.$set(self.game, '$loaded', false);*/
 
         return MetamaskService.games().getGameFields(self.gameId).then(function (r) {
 
@@ -348,6 +363,13 @@
 
   }
 
+  .jackpotstr {
+    font-size: 18px;
+    display: inline-block;
+    margin-left: 40px;
+    padding-top: 9px;
+  }
+
   .game-bank {
     font-size: 56px;
 
@@ -419,6 +441,7 @@
     background: #ffa800;
     /*color: #fff;*/
   }
+
   .pagination .page {
     background: #afbfda;
     padding: 10px;
@@ -426,12 +449,14 @@
     margin-right: 10px;
     cursor: pointer;
   }
-.text-finished {
-  text-align: center;
-  font-size: 40px;
-}
+
+  .text-finished {
+    text-align: center;
+    font-size: 40px;
+  }
+
   .help-ticket-text {
-    padding: 10px 0 20px ;
+    padding: 10px 0 20px;
     font-size: 14px;
   }
 

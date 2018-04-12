@@ -1,5 +1,11 @@
 <template>
   <div>
+  <div v-if="!loaded">
+    <div class="page-loading">
+      <img src="/static/loader.gif"/>
+    </div>
+  </div>
+  <div v-if="loaded">
 
     <div v-if="!orderedTickets.length" class="cap ow font-blue">
       {{$lang.messages.m5}}
@@ -84,6 +90,7 @@
 
     </table>
   </div>
+  </div>
 </template>
 <script>
   import Cube from 'components/Cube'
@@ -121,7 +128,8 @@
         sort: {
           name: 'number',
           order: 'desc'
-        }
+        },
+        loaded: false
       }
     },
 
@@ -148,49 +156,14 @@
 
           self.$set(self.game, 'tickets', []);
 
-          /*r = r.sort(function (a, b) {
-
-           if (parseInt(a.number) < parseInt(b.number)) {
-           return 1;
-           }
-           if (parseInt(a.number) > parseInt(b.number)) {
-           return -1;
-           }
-           // a должно быть равным b
-           return 0;
-
-           })*/
 
           for (var i = 0; i < r.length; i++) {
             r[i].number = parseInt(r[i].number);
             self.$set(self.game.tickets, i, r[i]);
           }
 
+          self.loaded = true;
 
-          /*return MetamaskService.games().initWatcher(self.gameId, self.roundId).then(function (event) {
-           event.e2.get(function (error, logs) {
-           for (var i = 0; i < logs.length; i++) {
-           if (logs[i].args.winnerHash == self.game.period.winnerHash) {
-           self.$set(self.game.period, 'tx', logs[i]);
-           }
-           }
-           });
-
-
-           event.e1.get(function (error, logs) {
-
-
-           for (var i = 0; i < logs.length; i++) {
-           for (var j = 0; j < self.game.tickets.length; j++) {
-           if (self.game.tickets[j].hash == logs[i].args.hash) {
-           self.$set(self.game.tickets[j], 'tx', logs[i]);
-           }
-           }
-           }
-
-
-           });
-           });*/
 
 
         });

@@ -6,7 +6,13 @@
 
     </div>-->
 
-    <div>
+    <div class="f-text-desc">
+
+      {{$lang.messages.txt1}}
+
+    </div>
+
+    <!--<div>
       {{$lang.messages.currentRound}}: #{{game.currentPeriod | int}}
     </div>
     <div>
@@ -18,7 +24,7 @@
 
     <div>
       {{$lang.messages.stock}}: {{game.maxTicketAmount - game.period.ticketAmount | int}}
-    </div>
+    </div>-->
     <div>
       {{$lang.messages.maxTicketAmount}}: {{game.maxTicketAmount | int}}
     </div>
@@ -32,9 +38,9 @@
     <div>
       {{$lang.messages.gpp}}: {{100 - game.benefitPercents - game.jackPotPercents | int}}%
     </div>
-    <div>
+    <!--<div>
       {{$lang.messages.jackpot}}: {{game.jackPotFunds | eth}}
-    </div>
+    </div>-->
 
 
     <div v-if="game.period.ticketAmount > 0 && game.period.finished" class="description-cube-container cap ">
@@ -74,6 +80,9 @@
   .description-cube-container .cube-outer {
     width: 32px;
     height: 32px;
+  }
+  .f-text-desc {
+    margin-bottom: 10px;
   }
 
 </style>

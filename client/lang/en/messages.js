@@ -53,6 +53,9 @@ module.exports = {
   m5: 'Buy the first Ticket in this Round',
   m6: 'Powered by Ethereum smart-contracts and DApp technology',
 
+  n1: 'So far you have never won',
+  n2: 'So far you have not bought a ticket',
+
   metamaskStatus : {
     0: 'Metamsk is not detected',
     1: 'Wrong Ethereum network',
@@ -66,7 +69,9 @@ module.exports = {
 
   t1: 'You can buy a ticket by sending',
   t2: 'to ethereum address',
-  t3: 'specify your unique hash phrase in transaction data, for example:'
+  t3: 'specify your unique hash phrase in transaction data, for example:',
+
+  txt1: "When buying the last ticket in the round, a reward will be sent to winner's address. The ticket with the smallest hash wins. If the winner's ticket hash is the smallest in the history of the game, the winner also receives a jackpot. The next round will start automatically"
 
 
 

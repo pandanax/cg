@@ -77,9 +77,9 @@ module.exports = {
         to: './static'
       },
       {
-        from: _.cwd('./solidity/build'),
+        from: _.cwd('./static/favicon.ico'),
         // to the root of dist path
-        to: './solidity/build'
+        to: './favicon.ico'
       }
     ])
   ],

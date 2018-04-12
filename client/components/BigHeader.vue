@@ -23,7 +23,7 @@
           {{$lang.messages.h1}}
         </div>
 
-        <a href="#/game/1" class="header-main-button cap">
+        <a href="/game/1" class="header-main-button cap">
           {{$lang.messages.h2}}
         </a>
 
@@ -38,7 +38,7 @@
         <div class="row">
         <div class="col-4 offset-4">
 
-          <a href="#/profile" class="btn btn-lg btn-block btn-primary">Играть</a>
+          <a href="/profile" class="btn btn-lg btn-block btn-primary">Играть</a>
         </div>
         </div>
       </div>

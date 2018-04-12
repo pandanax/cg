@@ -1,6 +1,6 @@
 <template>
   <nav v-if="level == 2" class="my-2 my-md-0 mr-md-3">
-    <a class="p-2 text-dark" href="#/games">Games</a>
+    <a class="p-2 text-dark" href="/games">Games</a>
   </nav>
 </template>
 <script>

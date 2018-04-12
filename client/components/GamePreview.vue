@@ -1,47 +1,53 @@
 <template>
-<div>
-  <div v-if="game.$loaded" class="row">
-    <div class="col-lg-5">
-      <a v-bind:href="'#/game/' + gameId" class="game-header cap ow">
-        {{$lang.messages.game}} {{gameId}}
-      </a>
-
-      <div class="game-address bold">
-        <a v-bind:href="'https://etherscan.io/address/'+game.address" target="_blank">{{game.address}}</a>
-      </div>
-      <div class="game-description">
-        <game-description v-bind:game-id="gameId" v-bind:game="game"></game-description>
-      </div>
-
+  <div>
+    <div v-if="!game.$loaded">
+      <img src="/static/loader.gif"/>
     </div>
-    <div class="col-lg-7">
-      <div class="game-bg">
-
-        <div class="ticket-price cap ow bold font-yellow">
-          {{$lang.messages.ticketPrice}}
-        </div>
-        <div class="ticket-price-val cap ow bold font-yellow">
-          {{game.ticketPrice | eth}}
-        </div>
-        <div class="current-round cap ow bold font-white">
-          {{$lang.messages.currentRound}} #{{game.currentPeriod}}
-        </div>
-        <div class="tickets-left cap ow bold font-white">
-          {{$lang.messages.stock}}: {{game.maxTicketAmount - game.period.ticketAmount | int}}
-        </div>
-
-        <div class="game-bank cap ow bold font-white">
-          {{$lang.messages.bank}}: {{game.period.raised | eth}}
-        </div>
-
-        <a class="game-win-btn bg-yellow cap ow" v-bind:href="'#/game/'+gameId">
-          {{$lang.messages.toWin}}
+    <div v-if="game.$loaded" class="row">
+      <div class="col-lg-5">
+        <a v-bind:href="'/game/' + gameId" class="game-header cap ow">
+          {{$lang.messages.game}} {{gameId}}
         </a>
 
+        <div class="game-address bold">
+          <a v-bind:href="'https://etherscan.io/address/'+game.address" target="_blank">{{game.address}}</a>
+        </div>
+        <div class="game-description">
+          <game-description v-bind:game-id="gameId" v-bind:game="game"></game-description>
+        </div>
+
+      </div>
+      <div class="col-lg-7">
+        <div class="game-bg">
+
+          <div class="ticket-price cap ow bold font-yellow">
+            {{$lang.messages.ticketPrice}}
+          </div>
+          <div class="ticket-price-val cap ow bold font-yellow">
+            {{game.ticketPrice | eth}}
+          </div>
+          <div class="current-round cap ow bold font-white">
+            {{$lang.messages.currentRound}} #{{game.currentPeriod}}
+          </div>
+          <div class="tickets-left cap ow bold font-white">
+            {{$lang.messages.stock}}: {{game.maxTicketAmount - game.period.ticketAmount | int}}
+          </div>
+          <div class="curjack cap ow bold font-white">
+            {{$lang.messages.jackpot}}: {{game.jackPotFunds | eth}}
+          </div>
+
+          <div class="game-bank cap ow bold font-white">
+            {{$lang.messages.bank}}: {{game.period.raised | eth}}
+          </div>
+
+          <a class="game-win-btn bg-yellow cap ow" v-bind:href="'/game/'+gameId">
+            {{$lang.messages.toWin}}
+          </a>
+
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 <script>
 
@@ -172,7 +178,11 @@
 
   .game-bank {
     font-size: 38px;
-    padding-top: 60px;
+    padding-top: 35px;
+  }
+
+  .curjack {
+    font-size: 18px;
   }
 
   a.game-win-btn {
