@@ -21,6 +21,90 @@ export default class Metamask {
 
   }
 
+  genesis() {
+    return {
+
+
+      getAccount(){
+        return web3.eth.accounts[0]
+      },
+      register(parentAddr, nickname, paymentAmount) {
+        return new Promise(function (resolve, reject) {
+
+          var MyContract = web3.eth.contract(EtherData.abi);
+          var g = MyContract.at(EtherData.address);
+
+          g.registration(parentAddr, nickname, {
+            from: web3.eth.accounts[0],
+            value: paymentAmount
+          }, function (e, r) {
+            console.log('OJO', e, r);
+            if (e) {
+              reject(e);
+            } else {
+              resolve(r);
+            }
+          })
+
+        })
+
+      },
+      getField(field, args) {
+        return new Promise(function (resolve, reject) {
+
+          var MyContract = web3.eth.contract(EtherData.abi);
+          var g = MyContract.at(EtherData.address);
+
+          if (args) {
+
+            g[field](...args, function (e, r) {
+              if (e) {
+                reject(e)
+              } else {
+                console.log('----',r.toString())
+                if (r.toString() != "0x" && r.toString() != 0) {
+
+                  resolve(r);
+                } else {
+                  resolve()
+                }
+              }
+            });
+          } else {
+            g[field](function (e, r) {
+              if (e) {
+                reject(e)
+              } else {
+
+                resolve(r);
+              }
+            });
+          }
+        })
+      },
+      getParent(addr) {
+        return new Promise(function (resolve, reject) {
+
+          var MyContract = web3.eth.contract(EtherData.abi);
+          var g = MyContract.at(EtherData.address);
+
+          g.parents(addr, function (e, r) {
+            if (e) {
+              reject(e)
+            } else {
+
+              resolve(r);
+            }
+          });
+        })
+        /*g.parents(addr, function (r) {
+         console.log('rr',r)
+         })*/
+
+      }
+    }
+  }
+
   games() {
 
     return {
