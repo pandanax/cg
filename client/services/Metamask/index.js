@@ -66,7 +66,7 @@ export default class Metamask {
 
                   resolve(r);
                 } else {
-                  resolve()
+                  resolve(r)
                 }
               }
             });

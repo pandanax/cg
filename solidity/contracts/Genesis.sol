@@ -132,19 +132,21 @@ contract Genesis {
     //increase funds for parent
     funds[parent] += msg.value;
 
-    //event
-    Signup(msg.sender, parent);
 
-    Payment(msg.sender, msg.value);
 
     capital += msg.value;
     customers++;
+
+    payments[msg.sender] = msg.value;
 
     //first child activity
     lastActivity[msg.sender] = now;
     //parent activity update
     lastActivity[parent] = now;
 
+    //events
+    Signup(msg.sender, parent);
+    Payment(msg.sender, msg.value);
 
   }
 

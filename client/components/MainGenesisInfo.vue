@@ -112,8 +112,9 @@
         let self = this
         //self.parentAddr
         MetamaskService.genesis().getField('payments', [self.parentAddr]).then(function (r) {
+            console.log("AAAAA",r,self.parentAddr)
           self.payment = r;
-          self.paymentAmount = r / Math.pow(10, 18) + 0.001
+          self.paymentAmount = r / Math.pow(10, 18)
         }).catch(console.error)
       },
 
@@ -143,7 +144,7 @@
         function startReadChild(index) {
           MetamaskService.genesis().getField('children', [self.acc, index]).then(function (r) {
             ++index;
-            if (r) {
+            if (r != '0x') {
 
               self.children.push(r);
               startReadChild(index)

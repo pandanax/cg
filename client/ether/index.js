@@ -1,5 +1,5 @@
 export default {
-  address: "0x0e95a4dd690a9f70f8690a8f5440db0dcf80a0cd",
+  address: "0x6c5ffe0fc8f391f874d415cbcfea1184965c6f5d",
   abi: [
     {
       "anonymous": false,

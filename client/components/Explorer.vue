@@ -86,12 +86,21 @@
           node.address = subAddr(addr);
 
           if (!node.children) {
-              node.children = []
+            node.children = []
           }
+          calling++;
 
+          MetamaskService.genesis().getField('availableFundsOf', [addr]).then(function (r) {
+              node.text += " [" +  r / Math.pow(10, 18) + " ETH]"//(", " + !isNaN(r) ? r / Math.pow(10, 18) : "0" + " ETH");
+            calling--;
+            if (!calling) {
+
+              self.loaded = true
+            }
+          })
 
           MetamaskService.genesis().getField('children', [addr, index]).then(function (r) {
-            if (r) {
+            if (r != '0x') {
               let el = {
                 id: id++,
                 text: subAddr(r),
@@ -103,6 +112,7 @@
               readChildren(r, 0, el)
               readChildren(addr, ++index, node);
             }
+
 
             calling--;
             if (!calling) {
