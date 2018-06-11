@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '../views/Home'
 import Explorer from '../views/Explorer'
 import Profile from '../views/Profile'
+import Faq from '../views/Faq'
 
 Vue.use(Router)
 
@@ -21,6 +22,10 @@ export default new Router({
     {
       path: '/profile',
       component: Profile
+    },
+    {
+      path: '/faq',
+      component: Faq
     }
 
   ]

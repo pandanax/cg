@@ -2,6 +2,7 @@
   <nav v-if="level == 2" class="my-2 my-md-0 mr-md-3 ">
     <a class="p-2 text-dark" href="#/profile">Profile</a>
     <a class="p-2 text-dark" href="#/explorer">Explorer</a>
+    <a class="p-2 text-dark" href="#/faq">FAQ</a>
   </nav>
 </template>
 <script>

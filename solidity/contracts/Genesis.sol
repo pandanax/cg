@@ -92,13 +92,6 @@ contract Genesis {
     nicknames[msg.sender] = nickname;
   }
 
-  /*function updateActivityAdmin(address child) public onlyGenesisOrAdmin {
-    //is registered
-    require(!isNotRegistered(child));
-    lastActivity[child] = now;
-
-  }*/
-
   function updateActivity() payable public {
     //is registered
     require(!isNotRegistered(msg.sender));
