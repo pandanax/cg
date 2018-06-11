@@ -1,5 +1,5 @@
 export default {
-  address: "0x6c5ffe0fc8f391f874d415cbcfea1184965c6f5d",
+  address: "0x8b13dd2ff28bb183a8b9fbbf50736827f412f2c8",
   abi: [
     {
       "anonymous": false,
@@ -25,7 +25,7 @@ export default {
     {
       "constant": false,
       "inputs": [],
-      "name": "getMineGenesis",
+      "name": "getMineAdmin",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -34,28 +34,10 @@ export default {
     {
       "constant": false,
       "inputs": [],
-      "name": "increaseBonusFlowSize10p10d",
+      "name": "getMineGenesis",
       "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "increaseBonusFlowSize20p20d",
-      "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "increaseBonusFlowSize30p30d",
-      "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
+      "payable": false,
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -71,6 +53,23 @@ export default {
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "parent",
+          "type": "address"
+        }
+      ],
+      "name": "Signup",
+      "type": "event"
     },
     {
       "constant": false,
@@ -100,7 +99,7 @@ export default {
           "type": "uint256"
         }
       ],
-      "name": "Raise",
+      "name": "Payment",
       "type": "event"
     },
     {
@@ -117,7 +116,7 @@ export default {
           "type": "uint256"
         }
       ],
-      "name": "Payment",
+      "name": "Raise",
       "type": "event"
     },
     {
@@ -141,23 +140,6 @@ export default {
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "addr",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "parent",
-          "type": "address"
-        }
-      ],
-      "name": "Signup",
-      "type": "event"
     },
     {
       "constant": false,
@@ -206,6 +188,15 @@ export default {
       "type": "function"
     },
     {
+      "constant": false,
+      "inputs": [],
+      "name": "updateActivity",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "name": "firstChild",
@@ -219,6 +210,20 @@ export default {
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "constructor"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "child",
+          "type": "address"
+        }
+      ],
+      "name": "updateActivityAdmin",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "payable": true,
@@ -260,7 +265,7 @@ export default {
         }
       ],
       "payable": false,
-      "stateMutability": "view",
+      "stateMutability": "pure",
       "type": "function"
     },
     {
@@ -374,25 +379,6 @@ export default {
         {
           "name": "",
           "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "sender",
-          "type": "address"
-        }
-      ],
-      "name": "getBonusFlowSize",
-      "outputs": [
-        {
-          "name": "percents",
-          "type": "uint256"
         }
       ],
       "payable": false,

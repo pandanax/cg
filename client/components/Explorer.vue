@@ -1,6 +1,34 @@
 <template>
   <div id="app" class="container-fluid">
 
+    <div v-if="currentNode">
+      <div>
+
+        {{currentNode.data.nickname}}
+      </div>
+
+      <div>
+
+        {{currentNode.data.address}}
+      </div>
+
+      <div>
+
+      Gain:  {{currentNode.data.gain | eth}}
+      </div>
+      <div v-if="currentNode.data.deadline">
+
+        DEADLINE!
+      </div>
+      <div>
+        Last Activity {{currentNode.data.lastActivity | sdate}} {{currentNode.data.lastActivity | stime}}
+      </div>
+      <div>
+
+        Ready for reward {{currentNode.data.funds | eth}}
+      </div>
+    </div>
+
     <div class=" panel panel-default" v-if="loaded">
       <tree ref="tree" :identifier="getId" :zoomable="zoomable" :data="Graph.tree" :node-text="nodeText"
             :margin-x="Marginx" :margin-y="Marginy" :radius="radius" :type="type" :layout-type="layoutType"
@@ -32,7 +60,8 @@
         zoomable: true,
         isLoading: false,
         events: [],
-
+        showCard: false,
+        genesis: '',
         Graph: {
 
           tree: {
@@ -83,20 +112,52 @@
           calling++;
           node.text = subAddr(addr);
           node.id = id++;
-          node.address = subAddr(addr);
+          node.address = addr;
 
           if (!node.children) {
             node.children = []
           }
           calling++;
 
-          MetamaskService.genesis().getField('availableFundsOf', [addr]).then(function (r) {
-              node.text += " [" +  r / Math.pow(10, 18) + " ETH]"//(", " + !isNaN(r) ? r / Math.pow(10, 18) : "0" + " ETH");
-            calling--;
-            if (!calling) {
+          MetamaskService.genesis().getField('availableFundsOf', [addr]).then(function (funds) {
 
-              self.loaded = true
-            }
+            MetamaskService.genesis().getField('payments', [addr]).then(function (gain) {
+
+              node.gain = gain
+              MetamaskService.genesis().getField('lastActivity', [addr]).then(function (lastActivity) {
+
+                node.lastActivity = lastActivity
+
+                MetamaskService.genesis().getField('deadLine').then(function (deadline) {
+
+
+                  MetamaskService.genesis().getField('nicknames', [addr]).then(function (r) {
+                    if (r) {
+                      node.nickname = r
+                      node.text = r
+                    }
+
+                    node.funds = funds
+                    if (funds > 0) {
+
+                      node.text += " [" + funds / Math.pow(10, 18) + " ETH]"//(", " + !isNaN(r) ? r / Math.pow(10, 18) : "0" + " ETH");
+                    }
+
+                    if (addr != self.genesis && (lastActivity * 1 + deadline * 1) * 1000 < (new Date()).getTime()) {
+                      node.deadline = true
+                      node.text += ' DEADLINE'
+                    }
+
+
+                    calling--;
+                    if (!calling) {
+
+                      self.loaded = true
+                    }
+                  })
+                })
+              })
+            })
           })
 
           MetamaskService.genesis().getField('children', [addr, index]).then(function (r) {
@@ -123,14 +184,16 @@
 
         }
 
+
         MetamaskService.genesis().getField('genesis').then(function (g) {
 
-          MetamaskService.genesis().getField('availableFundsOf', [g]).then(function (r) {
-            readChildren(g, 0, self.Graph.tree);
-          });
+          self.genesis = g
+
+          readChildren(g, 0, self.Graph.tree);
 
 
         });
+
 
       },
 
@@ -162,8 +225,9 @@
       ,
       onClick(evt)
       {
+
         this.currentNode = evt.element
-        this.onEvent('onClick', evt)
+
       }
       ,
       onExpand(evt)

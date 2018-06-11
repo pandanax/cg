@@ -20,9 +20,10 @@ const app = new Vue({
   router,
   store,
   filter,
+  localization,
   ...App
 })
 
-export { app, router, store, filter}
+export { app, router, store, filter, localization}
 
 

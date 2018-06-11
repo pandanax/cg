@@ -47,6 +47,11 @@ module.exports = {
         exclude: [/node_modules/]
       },
       {
+        test: /\.js$/,
+        loaders: ['babel-loader'],
+        include: [/node_modules\/detect-browser-language/]
+      },
+      {
         test: /\.es6$/,
         loaders: ['babel-loader']
       },
@@ -74,7 +79,7 @@ module.exports = {
       {
         from: _.cwd('./static'),
         // to the root of dist path
-        to: './'
+        to: './static'
       }
     ])
   ],

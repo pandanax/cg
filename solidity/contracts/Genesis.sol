@@ -23,22 +23,20 @@ contract Genesis {
 
   mapping (address => uint) public payments;
 
-  mapping (address => uint) bonusFlowSize;
-
-  mapping (address => uint) bonusFlowSizeExpired;
-
-  uint defaultFlowSize = 50;
-
   uint public customers;
 
   uint public capital;
 
-  uint public constant deadLine = 180 days; //bring him child
+  uint public constant deadLine = 30 minutes;
 
   address public genesis; //first element in genesis net
 
   modifier onlyGenesisOrAdmin() {
     require(msg.sender == genesis || parents[msg.sender] == genesis);
+    _;
+  }
+  modifier onlyAdmin() {
+    require(parents[msg.sender] == genesis);
     _;
   }
   modifier onlyGenesis() {
@@ -58,25 +56,6 @@ contract Genesis {
     return false;
   }
 
-  function currentPayment(address parentAddress) public constant returns (uint payment){
-    return payments[parentAddress];
-  }
-
-
-
-  //create first element
-  function Genesis(address firstChild, uint initialEnter) {
-
-    require(msg.sender != firstChild);
-    genesis = msg.sender;
-    nicknames[genesis] = 'Genesis';
-    parents[genesis] = 0x0;
-    payments[genesis] = 0;
-    customers++;
-    registerAdmin(firstChild, 'Admin', initialEnter);
-
-  }
-
 
   function registerAdmin(address admin, string name, uint enter) onlyGenesis public {
     require(isNotRegistered(admin));
@@ -89,7 +68,7 @@ contract Genesis {
     lastActivity[admin] = now;
   }
 
-  function bytesToAddress(bytes b) constant returns (address) {
+  function bytesToAddress(bytes b) pure public returns (address) {
     uint result = 0;
     for (uint i = b.length - 1; i + 1 > 0; i--) {
       uint c = uint(b[i]);
@@ -100,14 +79,39 @@ contract Genesis {
   }
 
   function() payable public {
-    bytes memory d = msg.data;
-    registration(bytesToAddress(msg.data), "");
+
+    if (isNotRegistered(msg.sender)) {
+      registration(bytesToAddress(msg.data), "");
+    }
+    else {
+      updateActivity();
+    }
   }
 
   function setNickname(string nickname) public {
     nicknames[msg.sender] = nickname;
   }
 
+  /*function updateActivityAdmin(address child) public onlyGenesisOrAdmin {
+    //is registered
+    require(!isNotRegistered(child));
+    lastActivity[child] = now;
+
+  }*/
+
+  function updateActivity() payable public {
+    //is registered
+    require(!isNotRegistered(msg.sender));
+    require(msg.value >= payments[msg.sender]);
+
+    //increase funds for parent
+    funds[parents[msg.sender]] += msg.value;
+
+    capital += msg.value;
+    lastActivity[msg.sender] = now;
+    emit Payment(msg.sender, msg.value);
+
+  }
   //user registration
   function registration(address parent, string nickname) payable public {
 
@@ -133,7 +137,6 @@ contract Genesis {
     funds[parent] += msg.value;
 
 
-
     capital += msg.value;
     customers++;
 
@@ -141,50 +144,20 @@ contract Genesis {
 
     //first child activity
     lastActivity[msg.sender] = now;
-    //parent activity update
-    lastActivity[parent] = now;
 
     //events
-    Signup(msg.sender, parent);
-    Payment(msg.sender, msg.value);
+    emit Signup(msg.sender, parent);
+    emit Payment(msg.sender, msg.value);
 
   }
 
-  function getBonusFlowSize(address sender) public constant returns (uint percents) {
-    if (bonusFlowSize[sender] > 0 && now > bonusFlowSizeExpired[sender]) {return bonusFlowSize[sender];}
-    return 0;
-  }
-
-  function increaseBonus(uint bonus, uint dayCount) private {
-
-    require(msg.value >= payments[msg.sender]);
-    bonusFlowSize[msg.sender] = bonus;
-    bonusFlowSizeExpired[msg.sender] = now + dayCount * 24 * 60 * 60;
-    Payment(msg.sender, msg.value);
-    capital += msg.value;
-
-  }
-
-  function increaseBonusFlowSize10p10d() payable public {
-
-    increaseBonus(10, 10);
-  }
-
-  function increaseBonusFlowSize20p20d() payable public {
-
-    increaseBonus(20, 20);
-
-  }
-
-  function increaseBonusFlowSize30p30d() payable public {
-
-    increaseBonus(30, 30);
-
-  }
 
   //every user
   function getMine() public withFunds {
 
+    //is active
+    require(now <= lastActivity[msg.sender] + deadLine);
+    //is not registered
     require(!isNotRegistered(msg.sender));
     //is not genesis
     require(msg.sender != genesis);
@@ -197,9 +170,35 @@ contract Genesis {
 
     msg.sender.transfer(mine);
 
-    Raise(msg.sender, mine);
+    emit Raise(msg.sender, mine);
 
     lastActivity[msg.sender] = now;
+
+  }
+
+  function getMineAdmin() public onlyAdmin withFunds {
+
+    uint mine = myAvailableFunds();
+
+    funds[parents[msg.sender]] += funds[msg.sender] - mine;
+
+    msg.sender.transfer(mine);
+    funds[msg.sender] = 0;
+    lastActivity[msg.sender] = now;
+
+    emit Raise(msg.sender, mine);
+  }
+
+  function getMineGenesis() public onlyGenesis withFunds {
+
+    //for me
+    uint mine = funds[msg.sender];
+
+    msg.sender.transfer(mine);
+    funds[msg.sender] = 0;
+    lastActivity[msg.sender] = now;
+
+    emit Raise(msg.sender, mine);
 
   }
 
@@ -208,30 +207,28 @@ contract Genesis {
   }
 
   function availableFundsOf(address addr) public constant returns (uint availableFunds) {
-    return funds[addr] * defaultFlowSize / 100 + funds[addr] * getBonusFlowSize(addr) / 100;
+    return funds[addr] / 2;
   }
 
+  function removeChild(uint index, address child) private {
 
-  function getMineGenesis() public onlyGenesis withFunds {
+    if (index >= children[parents[child]].length) return;
 
-    //for me
-    uint mine = funds[msg.sender];
-
-    funds[msg.sender] = 0;
-
-    msg.sender.transfer(mine);
-
-    Raise(msg.sender, mine);
-
-    lastActivity[msg.sender] = now;
+    for (uint i = index; i < children[parents[child]].length - 1; i++) {
+      children[parents[child]][i] = children[parents[child]][i + 1];
+    }
+    delete children[parents[child]][children[parents[child]].length - 1];
+    children[parents[child]].length--;
 
   }
+
 
   function killByDeadline(address child) public onlyGenesisOrAdmin {
 
     require(now > lastActivity[child] + deadLine);
-    require(children[child].length > 0);
 
+
+    //move children to parent of given child
     for (uint i = 0; i < children[child].length; i++) {
 
       children[parents[child]].push(children[child][i]);
@@ -239,13 +236,15 @@ contract Genesis {
       children[child][i] = 0x0;
     }
 
+    //remove given child from children of parent of given child
     for (uint j = 0; j < children[parents[child]].length; j++) {
 
       if (children[parents[child]][j] == child) {
-        delete children[parents[child]][j];
+        removeChild(j, child);
         break;
       }
     }
+
 
     children[child].length = 0;
 
@@ -257,7 +256,7 @@ contract Genesis {
 
     lastActivity[child] = 0;
 
-    Kill(child);
+    payments[msg.sender] = 0;
 
     lastActivity[msg.sender] = now;
 
@@ -265,54 +264,64 @@ contract Genesis {
 
     customers--;
 
+    emit Kill(child);
 
   }
 
 
-  function transferUser(address newGen) public {
+  function transferUser(address newAddress) public {
 
-    //new genesis is not member
-    require(isNotRegistered(newGen));
+
+    require(isNotRegistered(newAddress));
     require(!isNotRegistered(msg.sender));
 
+
+
+    //move children
     for (uint i = 0; i < children[msg.sender].length; i++) {
 
-      children[newGen].push(children[msg.sender][i]);
-      parents[children[msg.sender][i]] = newGen;
+      children[newAddress].push(children[msg.sender][i]);
+      parents[children[msg.sender][i]] = newAddress;
       children[msg.sender][i] = 0x0;
 
     }
 
-    if (parents[msg.sender] != 0x0) {
+    //if !genesis
+    if (msg.sender != genesis) {
 
+      //add to children of parent
+      children[parents[msg.sender]].push(newAddress);
+
+      //remove old addr from parent children
       for (uint j = 0; j < children[parents[msg.sender]].length; j++) {
 
         if (children[parents[msg.sender]][j] == msg.sender) {
-          delete children[parents[msg.sender]][j];
+          removeChild(j, msg.sender);
           break;
         }
       }
+
+
+
     }
+
+
 
     children[msg.sender].length = 0;
 
-    funds[newGen] = funds[msg.sender];
+    funds[newAddress] = funds[msg.sender];
     funds[msg.sender] = 0;
 
-    payments[newGen] = payments[msg.sender];
+    parents[newAddress] = parents[msg.sender];
+    parents[msg.sender] = 0x0;
+
+    payments[newAddress] = payments[msg.sender];
     payments[msg.sender] = 0;
 
-
-    bonusFlowSize[newGen] = bonusFlowSize[msg.sender];
-    bonusFlowSize[msg.sender] = 0;
-
-    bonusFlowSizeExpired[newGen] = bonusFlowSizeExpired[msg.sender];
-    bonusFlowSizeExpired[msg.sender] = 0;
-
-    nicknames[newGen] = nicknames[msg.sender];
+    nicknames[newAddress] = nicknames[msg.sender];
     nicknames[msg.sender] = '';
 
-    lastActivity[newGen] = now;
+    lastActivity[newAddress] = lastActivity[msg.sender];
     lastActivity[msg.sender] = 0;
 
   }
@@ -320,9 +329,11 @@ contract Genesis {
 
   function pushFundsInsteadChild(address child) public {
 
-    require(parents[child] == msg.sender || parents[parents[child]] == msg.sender || parents[parents[parents[child]]] == msg.sender);
+    require(now <= lastActivity[msg.sender] + deadLine || parents[msg.sender] == genesis || msg.sender == genesis);
+    require(parents[child] == msg.sender || parents[parents[child]] == msg.sender || parents[parents[parents[child]]] == msg.sender || parents[msg.sender] == genesis || msg.sender == genesis);
+
     require(children[child].length > 0);
-    require(funds[child] > 0);
+    require(availableFundsOf(child) > 0);
     require(!isNotRegistered(child));
 
     uint reward = availableFundsOf(child);
@@ -333,9 +344,22 @@ contract Genesis {
 
     child.transfer(reward);
 
-    Raise(child, reward);
+    emit Raise(child, reward);
 
     lastActivity[msg.sender] = now;
+
+  }
+
+  //create first element
+  constructor (address firstChild, uint initialEnter) public {
+
+    require(msg.sender != firstChild);
+    genesis = msg.sender;
+    nicknames[genesis] = 'Genesis';
+    parents[genesis] = 0x0;
+    payments[genesis] = 0;
+    customers++;
+    registerAdmin(firstChild, 'Admin', initialEnter);
 
   }
 

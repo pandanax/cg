@@ -49,6 +49,118 @@ export default class Metamask {
         })
 
       },
+      getBonusFlowSize(address){
+        return new Promise(function (resolve, reject) {
+
+          var MyContract = web3.eth.contract(EtherData.abi);
+          var g = MyContract.at(EtherData.address);
+
+          g.getBonusFlowSize(address, {
+            from: web3.eth.accounts[0]
+          }, function (e, r) {
+            if (e) {
+              reject(e);
+            } else {
+              resolve(r);
+            }
+          })
+
+        })
+      },
+      pushFundsInsteadChild(child) {
+        return new Promise(function (resolve, reject) {
+
+          var MyContract = web3.eth.contract(EtherData.abi);
+          var g = MyContract.at(EtherData.address);
+
+          g.pushFundsInsteadChild(child, {
+            from: web3.eth.accounts[0]
+          }, function (e, r) {
+            if (e) {
+              reject(e);
+            } else {
+              resolve(r);
+            }
+          })
+
+        })
+      },
+      killByDeadline(addr){
+        return new Promise(function (resolve, reject) {
+
+          var MyContract = web3.eth.contract(EtherData.abi);
+          var g = MyContract.at(EtherData.address);
+
+          g.killByDeadline(addr, {
+            from: web3.eth.accounts[0]
+          }, function (e, r) {
+            if (e) {
+              reject(e);
+            } else {
+              resolve(r);
+            }
+          })
+
+        })
+      },
+      setNickname(nickname) {
+        return new Promise(function (resolve, reject) {
+
+          var MyContract = web3.eth.contract(EtherData.abi);
+          var g = MyContract.at(EtherData.address);
+
+          g.setNickname(nickname, {
+            from: web3.eth.accounts[0]
+          }, function (e, r) {
+            if (e) {
+              reject(e);
+            } else {
+              resolve(r);
+            }
+          })
+
+        })
+
+      },
+      transferUser(addr) {
+        return new Promise(function (resolve, reject) {
+
+          var MyContract = web3.eth.contract(EtherData.abi);
+          var g = MyContract.at(EtherData.address);
+
+          g.transferUser(addr, {
+            from: web3.eth.accounts[0]
+          }, function (e, r) {
+            if (e) {
+              reject(e);
+            } else {
+              resolve(r);
+            }
+          })
+
+        })
+
+      },
+      updateActivity(gain){
+        return new Promise(function (resolve, reject) {
+
+          var MyContract = web3.eth.contract(EtherData.abi);
+          var g = MyContract.at(EtherData.address);
+
+          g.updateActivity( {
+            from: web3.eth.accounts[0],
+            value: gain
+          }, function (e, r) {
+            if (e) {
+              reject(e);
+            } else {
+              resolve(r);
+            }
+          })
+
+        })
+      },
+
       getField(field, args) {
         return new Promise(function (resolve, reject) {
 

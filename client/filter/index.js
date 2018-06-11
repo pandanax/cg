@@ -20,6 +20,11 @@ Vue.filter('int', function (value) {
   return value*1;
 
 });
+Vue.filter('bytes', function (value) {
+
+  return value.substring(0,6);
+
+});
 Vue.filter('sdate', function (value) {
   if (!value) return ''
   value = new Date(value * 1000);
