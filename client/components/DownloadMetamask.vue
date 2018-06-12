@@ -8,8 +8,8 @@
       <p class="mt-4">
         Don't have Metamask?
       </p>
-      <a href="https://metamask.io/" target="_blank"><img src="https://s3-us-west-1.amazonaws.com/ethgenesis/download-metamask.png"
-                                                          alt="Download Metamask Browser Extension" style="max-width:100%;"></a>
+      <a href="https://metamask.io/" target="_blank"><img src="/static/download-metamask.png"
+                                                          alt="download metamask button" style="max-width:100%;"></a>
     </div>
   </div>
 </template>
