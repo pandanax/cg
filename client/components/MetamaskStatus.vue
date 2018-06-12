@@ -10,9 +10,9 @@
               {{$lang.messages.metamaskStatus[level]}}
             </div>
             <div class="pull-right" v-if="level == 3">
-              <a class="profile-link" href="/profile">
+              <router-link  class="profile-link" to="/profile">
                 {{$lang.messages.profile}}
-              </a>
+              </router-link>
             </div>
           </div>
         </div>

@@ -23,9 +23,9 @@
           {{$lang.messages.h1}}
         </div>
 
-        <a href="/game/1" class="header-main-button cap">
+        <router-link to="/game/1" class="header-main-button cap">
           {{$lang.messages.h2}}
-        </a>
+        </router-link>
 
       </header>
 

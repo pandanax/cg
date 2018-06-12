@@ -5,9 +5,9 @@
     </div>
     <div v-if="game.$loaded" class="row">
       <div class="col-lg-5">
-        <a v-bind:href="'/game/' + gameId" class="game-header cap ow">
+        <router-link :to="'/game/' + gameId" class="game-header cap ow t66">
           {{$lang.messages.game}} {{gameId}}
-        </a>
+        </router-link>
 
         <div class="game-address bold">
           <a v-bind:href="'https://etherscan.io/address/'+game.address" target="_blank">{{game.address}}</a>
@@ -40,9 +40,10 @@
             {{$lang.messages.bank}}: {{game.period.raised | eth}}
           </div>
 
-          <a class="game-win-btn bg-yellow cap ow" v-bind:href="'/game/'+gameId">
+          <router-link  class="game-win-btn bg-yellow cap ow" :to="'/game/'+gameId">
             {{$lang.messages.toWin}}
-          </a>
+          </router-link>
+
 
         </div>
       </div>

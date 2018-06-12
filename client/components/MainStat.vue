@@ -95,8 +95,6 @@
               <td><span>{{l.returnValues.winnerHash | bytes}}</span></td>
               <td>
                 {{l.returnValues.winnerAddr}}
-                <!--<a
-                  v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>-->
               </td>
               <td>
                 {{l.price}} ETH
@@ -109,21 +107,6 @@
                 {{l.returnValues.when | stime}}
               </td>
 
-              <!--<hr/>
-              <div v-if="t.tx && t.tx.returnValues">
-
-                <div style="float: right">{{t.tx.returnValues.when | sdate}} {{t.tx.returnValues.when | stime}}</div>
-                <div style="font-size: 12px" class="card-text">        {{$lang.messages.owner}}:
-                  <a
-                  v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>
-                  <br/>
-
-                  {{$lang.messages.transaction}}:
-                  <a v-bind:href="'https://rinkeby.etherscan.io/tx/'+t.tx.transactionHash"
-                                 target="_blank">{{t.tx.transactionHash}}</a>
-                </div>
-
-              </div>-->
 
             </tr>
 

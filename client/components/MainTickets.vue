@@ -62,7 +62,7 @@
         <td>
           {{t.addr}}
           <!--<a
-            v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>-->
+            v-bind:href="'https://etherscan.io/address/'+t.addr">{{t.addr}}</a>-->
         </td>
         <td>
           {{game.ticketPrice | eth}}
@@ -74,11 +74,11 @@
           <div style="float: right">{{t.tx.args.when | sdate}} {{t.tx.args.when | stime}}</div>
           <div style="font-size: 12px" class="card-text">        {{$lang.messages.owner}}:
             <a
-            v-bind:href="'https://rinkeby.etherscan.io/address/'+t.addr">{{t.addr}}</a>
+            v-bind:href="'https://etherscan.io/address/'+t.addr">{{t.addr}}</a>
             <br/>
 
             {{$lang.messages.transaction}}:
-            <a v-bind:href="'https://rinkeby.etherscan.io/tx/'+t.tx.transactionHash"
+            <a v-bind:href="'https://etherscan.io/tx/'+t.tx.transactionHash"
                            target="_blank">{{t.tx.transactionHash}}</a>
           </div>
 

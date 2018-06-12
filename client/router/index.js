@@ -12,39 +12,47 @@ import Faq from '../views/Faq'
 Vue.use(Router)
 
 export default new Router({
-  //mode: 'hash',
-  mode: 'history',
+  mode: 'hash',
+  //mode: 'history',
   routes: [
     {
+      name: 'home',
       path: '/',
       component: Home
     },
     {
+      name: 'profile',
       path: '/profile',
       component: Profile
     },
     {
+      name: 'games',
       path: '/games',
       component: Games
     },
     {
+      name: 'stat',
       path: '/stat',
       component: Stat
     },
 
     {
+      name: 'game',
       path: '/game/:gameId',
       component: Game,
     },
     {
+      name: 'round',
       path: '/game/:gameId/:roundId',
       component: Round
     },
     {
+      name: 'how',
       path: '/how',
       component: How
     },
     {
+      name: 'faq',
       path: '/faq',
       component: Faq
     }

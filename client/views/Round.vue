@@ -102,7 +102,7 @@
     methods: {
       /*handlerOk2Modal(){
 
-        let url = 'https://rinkeby.etherscan.io/tx/' + this.buyHash;
+        let url = 'https://etherscan.io/tx/' + this.buyHash;
         window.open(url, '_blank');
       },
 */

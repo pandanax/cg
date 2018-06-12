@@ -3,16 +3,16 @@
     <div class="container ow">
       <ul class="main-menu cap">
         <li>
-          <a href="/games">{{$lang.messages.menu1}}</a>
+          <router-link to="/games">{{$lang.messages.menu1}}</router-link>
         </li>
         <li>
-          <a href="/stat">{{$lang.messages.menu2}}</a>
+          <router-link to="/stat">{{$lang.messages.menu2}}</router-link>
         </li>
         <li>
-          <a href="/how">{{$lang.messages.menu3}}</a>
+          <router-link to="/how">{{$lang.messages.menu3}}</router-link>
         </li>
         <li>
-          <a href="/faq">{{$lang.messages.menu4}}</a>
+          <router-link to="/faq">{{$lang.messages.menu4}}</router-link>
         </li>
       </ul>
     </div>

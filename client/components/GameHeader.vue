@@ -4,7 +4,7 @@
     <b-modal id="modal2" title="Transaction Hash" hide-footer>
 
 
-      <a style="font-size: 16px;word-break: break-word;" v-bind:href="'https://rinkeby.etherscan.io/tx/'+buyHash"
+      <a style="font-size: 16px;word-break: break-word;" v-bind:href="'https://etherscan.io/tx/'+buyHash"
          target="_blank">
         {{buyHash}}
       </a>
@@ -17,7 +17,7 @@
 
     <div v-if="game.period" class="col-sm-4">
       <h1 v-bind:style="{ color: '#'+game.period.winnerHash.substring(2, 8) }">#{{roundId}}</h1>
-      <a v-bind:href="'https://rinkeby.etherscan.io/address/'+game.address" target="_blank"
+      <a v-bind:href="'https://etherscan.io/address/'+game.address" target="_blank"
          style="word-break: break-word; font-size: 10px">{{game.address}}</a>
       <div class="badge badge-success" v-if="game.currentPeriod == roundId">{{$lang.messages.currentRound}}
       </div>
@@ -115,7 +115,7 @@
               </div>
               <div style="  font-size: 12px; white-space: nowrap">
                 <a
-                  v-bind:href="'https://rinkeby.etherscan.io/address/'+game.period.winnerAddress">
+                  v-bind:href="'https://etherscan.io/address/'+game.period.winnerAddress">
                   {{game.period.winnerAddress}}
                 </a>
               </div>
