@@ -218,6 +218,8 @@ contract Genesis {
 
   function killByDeadline(address child) public onlyGenesisOrAdmin {
 
+    require(child != genesis);
+
     require(now > lastActivity[child] + deadLine);
 
 
@@ -294,8 +296,8 @@ contract Genesis {
         }
       }
 
-
-
+    } else {
+      genesis = newAddress;
     }
 
 
@@ -322,12 +324,10 @@ contract Genesis {
 
   function pushFundsInsteadChild(address child) public {
 
+    require(!isNotRegistered(child));
     require(now <= lastActivity[msg.sender] + deadLine || parents[msg.sender] == genesis || msg.sender == genesis);
     require(parents[child] == msg.sender || parents[parents[child]] == msg.sender || parents[parents[parents[child]]] == msg.sender || parents[msg.sender] == genesis || msg.sender == genesis);
-
-    require(children[child].length > 0);
     require(availableFundsOf(child) > 0);
-    require(!isNotRegistered(child));
 
     uint reward = availableFundsOf(child);
 

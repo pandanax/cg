@@ -4,6 +4,7 @@ import Home from '../views/Home'
 import Explorer from '../views/Explorer'
 import Profile from '../views/Profile'
 import Faq from '../views/Faq'
+import Ref from '../views/Ref'
 
 Vue.use(Router)
 
@@ -26,6 +27,10 @@ export default new Router({
     {
       path: '/faq',
       component: Faq
+    },
+    {
+      path: '/ref',
+      component: Ref
     }
 
   ]

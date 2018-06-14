@@ -3,6 +3,15 @@ import $ from "jquery"; // подключаем jQuery
 
 export default class Metamask {
 
+  getTx(tx) {
+    return new Promise(function (resolve, reject) {
+      web3.eth.getTransactionReceipt(tx, function (e,r) {
+        if (e) reject(e)
+        resolve(r)
+      })
+    })
+  }
+
   detectLevel() {
 
     let level = 0; //without all

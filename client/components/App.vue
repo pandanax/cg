@@ -28,6 +28,13 @@
     },
     created: function () {
 
+      var url = new URL(location.href);
+      var r = url.searchParams.get("r");
+
+      if (r) {
+        localStorage.setItem('ref', r);
+      }
+
 
       var s = detectLang();
       var lng = s.substring(0, 2).toLowerCase();

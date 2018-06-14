@@ -20,7 +20,8 @@
 
                 <input class="form-control" placeholder="parent address" v-model="parentAddr"/>
               </div>
-              <button type="button" class="btn btn-primary" v-on:click="join">CHECK</button>
+              <button :disabled="payment || parentAddr == ''" type="button" class="btn btn-primary" v-on:click="join">CHECK</button>
+              <button :disabled="!payment || parentAddr == ''" type="button" class="btn btn-default" v-on:click="payment = false; parentAddr = ''">CLEAR</button>
 
 
               <div v-if="payment" class="mt-3">
@@ -31,15 +32,15 @@
 
                   <div class="form-group">
                     <label>
-                      Nickname
+                     Enter Nickname
                     </label>
                     <input class="form-control" placeholder="nickname" v-model="nickname"/>
                   </div>
                   <div class="form-group">
                     <label>
-                      Desired Gain (>={{payment | eth}})
+                      Enter Your Gain (>={{payment | eth}})
                     </label>
-                    <input class="form-control" :placeholder="paymentPlaceholder" v-model="paymentAmount"/>
+                    <input class="form-control" placeholder="gain" v-model="paymentAmount"/>
                   </div>
                   <button :disabled="(registerTx)?true:false" type="button" class="btn btn-success" v-on:click="pay">
                     SIGN UP
@@ -91,7 +92,7 @@
                 <div>
 
                   <small v-if="newNickNameTx">
-                    Tx Hash: {{newNickNameTx}}
+                    Tx Hash: {{newNickNameTx}} <i class="fa fa-edit"></i>
                   </small>
                 </div>
               </div>
@@ -152,7 +153,8 @@
                 YOUR ACCOUNT HAS EXPIRED {{deadline | sdate}} {{deadline | stime}}!
               </div>
               <div v-else="">
-                <button :disabled="(getMineTx)?true:false" v-if="acc != genesis && parent != genesis" class="btn btn-primary"
+                <button :disabled="(getMineTx)?true:false" v-if="acc != genesis && parent != genesis"
+                        class="btn btn-primary"
                         v-on:click="getMine">GET MY FUNDS
                 </button>
 
@@ -258,6 +260,7 @@
 
         MetamaskService.genesis().getField('getMineGenesis').then(function (r) {
           self.getMineTx = r
+          self.setTimerTransaction(self.getMineTx);
 
         })
       },
@@ -267,6 +270,7 @@
 
         MetamaskService.genesis().getField('getMineAdmin').then(function (r) {
           self.getMineTx = r
+          self.setTimerTransaction(self.getMineTx);
 
         })
       },
@@ -276,14 +280,30 @@
 
         MetamaskService.genesis().getField('getMine').then(function (r) {
           self.getMineTx = r
+          self.setTimerTransaction(self.getMineTx);
         })
       },
+
+      setTimerTransaction(txName){
+        let self = this;
+        setTimeout(function () {
+          MetamaskService.getTx(txName).then(function (r) {
+            if (r && r.status) {
+              location.reload()
+            } else {
+              self.setTimerTransaction(txName)
+            }
+          })
+        }, 3000)
+      },
+
       setNewNicknameAction(e){
         e.preventDefault()
         let self = this;
         MetamaskService.genesis().setNickname(self.newNickName).then(function (r) {
           self.newNickName = '';
           self.newNickNameTx = r;
+          self.setTimerTransaction(self.newNickNameTx)
           //self.showSetNickForm = false;
         })
       },
@@ -293,6 +313,8 @@
         let self = this;
         MetamaskService.genesis().register(self.parentAddr, self.nickname, self.paymentAmount * Math.pow(10, 18)).then(function (r) {
           self.registerTx = r;
+          self.setTimerTransaction(self.registerTx);
+
         })
       },
       join(){
@@ -310,14 +332,23 @@
         e.preventDefault()
         MetamaskService.genesis().updateActivity(self.gain).then(function (r) {
           self.updateActivityTx = r;
+          self.setTimerTransaction(self.updateActivityTx);
+
         })
       },
 
       init: function () {
         let self = this;
+
+        if (localStorage.getItem('ref')) {
+          self.parentAddr = localStorage.getItem('ref')
+          self.join()
+        }
+
         self.level = MetamaskService.detectLevel();
 
         self.acc = MetamaskService.genesis().getAccount();
+
 
         MetamaskService.genesis().getField('genesis').then(function (r) {
           self.genesis = r;
@@ -346,7 +377,6 @@
           self.lastActivity = r;
           MetamaskService.genesis().getField('deadLine').then(function (r) {
             self.deadline = r * 1 + self.lastActivity * 1;
-            console.log('aaaa', (self.deadline - (new Date()).getTime() / 1000) / 60 / 60 / 24)
           });
         });
 
@@ -361,7 +391,6 @@
 
 
           }).catch(function (e) {
-            console.log('eee', e);
 
           });
         }
