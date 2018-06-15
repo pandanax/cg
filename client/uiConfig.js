@@ -1,3 +1,3 @@
 export default {
-  mainUrl: 'localhost:4000'
+  mainUrl: 'http://ethgenesis.s3-website-us-west-1.amazonaws.com/'
 }

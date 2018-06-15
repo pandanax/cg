@@ -1,5 +1,5 @@
 export default {
-  address: "0x89b5b040bc0f3137ea686d124b099fcd7476c646",
+  address: "0x6aa7bd56a63e15024ca9eea284886ace65cbfa77",
   abi: [
     {
       "anonymous": false,
@@ -53,23 +53,6 @@ export default {
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "addr",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "parent",
-          "type": "address"
-        }
-      ],
-      "name": "Signup",
-      "type": "event"
     },
     {
       "constant": false,
@@ -142,6 +125,23 @@ export default {
       "type": "function"
     },
     {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "parent",
+          "type": "address"
+        }
+      ],
+      "name": "Signup",
+      "type": "event"
+    },
+    {
       "constant": false,
       "inputs": [
         {
@@ -177,7 +177,7 @@ export default {
       "constant": false,
       "inputs": [
         {
-          "name": "newGen",
+          "name": "newAddress",
           "type": "address"
         }
       ],
@@ -210,20 +210,6 @@ export default {
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "constructor"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "child",
-          "type": "address"
-        }
-      ],
-      "name": "updateActivityAdmin",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
     },
     {
       "payable": true,
@@ -299,25 +285,6 @@ export default {
         {
           "name": "",
           "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "parentAddress",
-          "type": "address"
-        }
-      ],
-      "name": "currentPayment",
-      "outputs": [
-        {
-          "name": "payment",
-          "type": "uint256"
         }
       ],
       "payable": false,
@@ -494,5 +461,24 @@ export default {
       "stateMutability": "view",
       "type": "function"
     }
-  ]
+  ],
+  metadata: {
+    "compiler": {"version": "0.4.24+commit.e67f0147"},
+    "language": "Solidity",
+    "settings": {
+      "compilationTarget": {"browser/Genesis.sol": "Genesis"},
+      "evmVersion": "byzantium",
+      "libraries": {},
+      "optimizer": {"enabled": false, "runs": 200},
+      "remappings": []
+    },
+    "sources": {
+      "browser/Genesis.sol": {
+        "keccak256": "0xbf594cc843e5ac4b14d91b8d9be3884885b6e7ac349cd58f59bdf3c4433b2da2",
+        "urls": ["bzzr://f7c7682e71a091e82a2d983460979ea15903fe3677f98b29d5fb5dbfb24c313f"]
+      }
+    },
+    "version": 1
+  }
 }
+
