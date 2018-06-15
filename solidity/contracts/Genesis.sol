@@ -27,7 +27,7 @@ contract Genesis {
 
   uint public capital;
 
-  uint public constant deadLine = 30 minutes;
+  uint public constant deadLine = 30 days;
 
   address public genesis; //first element in genesis net
 
@@ -343,23 +343,23 @@ contract Genesis {
 
   }
 
-  //create first element
-  constructor (address firstChild, uint initialEnter) public {
+//create first element
+constructor (address firstChild, uint initialEnter) public {
 
-    require(msg.sender != firstChild);
-    genesis = msg.sender;
-    nicknames[genesis] = 'Genesis';
-    parents[genesis] = 0x0;
-    payments[genesis] = 0;
-    customers++;
-    registerAdmin(firstChild, 'Admin', initialEnter);
+require(msg.sender != firstChild);
+genesis = msg.sender;
+nicknames[genesis] = 'Genesis';
+parents[genesis] = 0x0;
+payments[genesis] = 0;
+customers++;
+registerAdmin(firstChild, 'Admin', initialEnter);
 
-  }
+}
 
 
 }
 
 
-//"0x23B3d7671b37Ea2A270fBeba084F1668DB3201F7","10000000000000000"
-//0x7046afcfd68cb6bb2ad5463fe90943e50ed0ce86
+//"0xBA0b064815127142E114cAB52967b7A2F8EDE724","10000000000000000"
+
 
